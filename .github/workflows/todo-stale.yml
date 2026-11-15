@@ -1,0 +1,29 @@
+name: Stale TODO check
+on:
+  schedule:
+    - cron: '0 6 * * 1' # Mondays 06:00 UTC
+  workflow_dispatch:    # lets you run it by hand
+
+permissions:
+  contents: read
+  issues: read
+
+jobs:
+  stale-todos:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Report TODOs referencing closed issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          fail=0
+          for n in $(git grep -ohP 'TODO\(#\K[0-9]+' -- . ':!.github/' | sort -u); do
+            state=$(gh issue view "$n" --json state -q .state 2>/dev/null || echo MISSING)
+            if [ "$state" = "CLOSED" ]; then
+              echo "::warning::TODO(#$n) references a closed issue; remove the TODO"
+              git grep -n "TODO(#$n)" -- . ':!.github/'
+              fail=1
+            fi
+          done
+          exit $fail
