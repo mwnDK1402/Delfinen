@@ -31,3 +31,30 @@ jobs:
           cache: maven
       - name: Test with Maven
         run: mvn -B -ntp test
+  todo-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: read
+    steps:
+      - uses: actions/checkout@v7
+      - name: Every TODO references an issue
+        run: |
+          bad=$(git grep -nP '\b(TODO|FIXME|XXX)\b(?!\(#[0-9]+\))' -- . ':!.github/' || true)
+          if [ -n "$bad" ]; then
+            echo "TODOs must look like TODO(#123). Offending lines:"
+            echo "$bad"
+            exit 1
+          fi
+      - name: Every referenced issue exists
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          fail=0
+          for n in $(git grep -ohP 'TODO\(#\K[0-9]+' -- . ':!.github/' | sort -u); do
+            if ! gh issue view "$n" > /dev/null 2>&1; then
+              echo "TODO(#$n): no such issue"
+              fail=1
+            fi
+          done
+          exit $fail
