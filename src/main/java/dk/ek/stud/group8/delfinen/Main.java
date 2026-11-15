@@ -9,10 +9,17 @@ public class Main {
     }
 
     sealed interface Cardinal4 {
-        record One() implements Cardinal4 { }
-        record Two() implements Cardinal4 { }
-        record Three() implements Cardinal4 { }
-        record Four() implements Cardinal4 { }
+        record One() implements Cardinal4 {
+        }
+
+        record Two() implements Cardinal4 {
+        }
+
+        record Three() implements Cardinal4 {
+        }
+
+        record Four() implements Cardinal4 {
+        }
     }
 
     static void main() {
@@ -25,17 +32,28 @@ public class Main {
         short cardinal65536 = 0; // 2^16 = 65536 values
 
         // PRODUCT TYPES
-        record Composite4(Cardinal3 a, Cardinal3 b) { } // (1 + 1 + 1) * (1 + 1 + 1) = 9 values
-        Composite4 composite9 = new Composite4(Cardinal3.THREE, Cardinal3.TWO);
+        record Composite9(Cardinal3 a, Cardinal3 b) {
+        } // (1 + 1 + 1) * (1 + 1 + 1) = 9 values
+        Composite9 composite9 = new Composite9(Cardinal3.THREE, Cardinal3.TWO);
 
         // SUM OF PRODUCTS
         SumOfProduct sumOfProduct1 = new SumOfProduct.BoringValue();
         SumOfProduct sumOfProduct2 = new SumOfProduct.CoolValue(Cardinal3.TWO, true);
         // (1) + (3 * 2) = 7 values
+
+        switch (sumOfProduct1) {
+            case SumOfProduct.BoringValue boringValue -> {
+            }
+            case SumOfProduct.CoolValue coolValue -> {
+            }
+        }
     }
 
     sealed interface SumOfProduct {
-        record BoringValue() implements SumOfProduct { }
-        record CoolValue(Cardinal3 value, boolean isAwesome) implements SumOfProduct { }
+        record BoringValue() implements SumOfProduct {
+        }
+
+        record CoolValue(Cardinal3 value, boolean isAwesome) implements SumOfProduct {
+        }
     }
 }
