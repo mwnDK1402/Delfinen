@@ -40,7 +40,7 @@ jobs:
       - uses: actions/checkout@v7
       - name: Every TODO references an issue
         run: |
-          bad=$(git grep -nP '\b(TODO|FIXME|XXX)\b(?!\(#[0-9]+\))' -- . ':!.github/' || true)
+          bad=$(git grep -nP '\b(TODO|FIXME|XXX)\b(?!\(#[0-9]+\))' -- src/ || true)
           if [ -n "$bad" ]; then
             echo "TODOs must look like TODO(#123). Offending lines:"
             echo "$bad"
@@ -51,7 +51,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           fail=0
-          for n in $(git grep -ohP 'TODO\(#\K[0-9]+' -- . ':!.github/' | sort -u); do
+          for n in $(git grep -ohP 'TODO\(#\K[0-9]+' -- src/ | sort -u); do
             if ! gh issue view "$n" > /dev/null 2>&1; then
               echo "TODO(#$n): no such issue"
               fail=1

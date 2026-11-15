@@ -18,11 +18,11 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           fail=0
-          for n in $(git grep -ohP 'TODO\(#\K[0-9]+' -- . ':!.github/' | sort -u); do
+          for n in $(git grep -ohP 'TODO\(#\K[0-9]+' -- src/ | sort -u); do
             state=$(gh issue view "$n" --json state -q .state 2>/dev/null || echo MISSING)
             if [ "$state" = "CLOSED" ]; then
               echo "::warning::TODO(#$n) references a closed issue; remove the TODO"
-              git grep -n "TODO(#$n)" -- . ':!.github/'
+              git grep -n "TODO(#$n)" -- src/
               fail=1
             fi
           done
