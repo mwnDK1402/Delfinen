@@ -5,9 +5,10 @@
 
 ## Gruppe 8
 
-| Fornavn | GitHub                                    |
-|---------|-------------------------------------------|
-| Mathias | [mwnDK1402](https://github.com/mwnDK1402) |
+| Fornavn  | GitHub                                    |
+|----------|-------------------------------------------|
+| Mathias  | [mwnDK1402](https://github.com/mwnDK1402) |
+| Isabella | [isapkl](https://github.com/isapkl)       |
 
 ## Sprog og konventioner
 
@@ -34,5 +35,5 @@ public class Competition {
 }
 ```
 
-**Hvorfor:** Koden er teknisk og følger engelske standarder for at fungere i IDE'er og værktøjer.
-Kommentarer, dokumentation og UI er på dansk, fordi de beskriver domænet for mennesker.
+**Hvorfor:** Koden er teknisk og følger engelske standarder for at fungere i IDE'er og værktøjer. Kommentarer,
+dokumentation og UI er på dansk, fordi de beskriver domænet for mennesker.
