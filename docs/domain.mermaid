@@ -1,0 +1,49 @@
+classDiagram
+    direction BT
+
+    class Medlem {
+        alder
+    }
+    class Konkurrencesvømmer {}
+    class Konkurrencehold {
+        ungdomshold eller seniorhold
+    }
+    class Aktivitetsform {
+        aktivt eller passivt
+        junior eller senior
+        motionist eller konkurrencesvømmer
+    }
+    class Kontingent {
+        år
+        størrelse
+        betalt eller ikke betalt
+    }
+    class Svømmeresultat {
+        tid
+        dato
+    }
+    class Stævne {}
+    class Konkurrenceresultat {
+        placering
+        tid
+    }
+    class Træner {}
+    class Svømmedisciplin {
+        butterfly
+        crawl
+        rygcrawl
+        brystsvømning
+    }
+    Konkurrencesvømmer "*" -- "1..4" Svømmedisciplin : er aktiv i
+    Medlem <|-- Konkurrencesvømmer
+    Medlem *-- Aktivitetsform
+    Medlem "1" -- "1..*" Kontingent : har
+    Konkurrencesvømmer "*" -- "1" Træner : har
+    Konkurrencesvømmer "*" -- "1" Konkurrencehold : er inddelt i
+    Konkurrenceresultat "1..*" -- "1" Stævne : er registreret ved
+    Konkurrenceresultat <|-- Svømmeresultat
+
+    note for Kontingent "Ungdomssvømmere: 1.000 kr. årligt
+    Seniorsvømmere: 1.600 kr. årligt
+    Medlemmer over 60 år: 75% af seniortaksten
+    Passive medlemmer: 500 kr. årligt"
