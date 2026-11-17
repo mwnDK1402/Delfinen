@@ -1,6 +1,9 @@
+# Delfinen
+
+[![Java CI with Maven](https://github.com/mwnDK1402/Delfinen/actions/workflows/ci.yml/badge.svg)](https://github.com/mwnDK1402/Delfinen/actions/workflows/ci.yml)
 [![Stale TODO check](https://github.com/mwnDK1402/Delfinen/actions/workflows/todo-stale.yml/badge.svg)](https://github.com/mwnDK1402/Delfinen/actions/workflows/todo-stale.yml)
 
-## Gruppen
+## Gruppe 8
 
 | Fornavn | GitHub                                    |
 |---------|-------------------------------------------|
