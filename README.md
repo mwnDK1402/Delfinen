@@ -5,10 +5,11 @@
 
 ## Gruppe 8
 
-| Fornavn  | GitHub                                    |
-|----------|-------------------------------------------|
-| Mathias  | [mwnDK1402](https://github.com/mwnDK1402) |
-| Isabella | [isapkl](https://github.com/isapkl)       |
+| Fornavn  | GitHub                                              |
+|----------|-----------------------------------------------------|
+| Mathias  | [mwnDK1402](https://github.com/mwnDK1402)           |
+| Isabella | [isapkl](https://github.com/isapkl)                 |
+| Simon    | [Simongroendahl](https://github.com/Simongroendahl) |
 
 ## Sprog og konventioner
 
