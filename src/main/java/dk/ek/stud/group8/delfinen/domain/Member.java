@@ -1,6 +1,7 @@
 package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 public final class Member {
     private final String name;
@@ -14,9 +15,8 @@ public final class Member {
         if (birthDate.isAfter(now))
             throw new FutureBirthDateException(now, birthDate);
 
-        this.name = name;
-        this.birthDate = birthDate;
-
+        this.name = Objects.requireNonNull(name);
+        this.birthDate = Objects.requireNonNull(birthDate);
     }
 
     public static final class BlankNameException extends RuntimeException {
