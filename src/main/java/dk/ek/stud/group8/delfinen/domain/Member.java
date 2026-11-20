@@ -7,12 +7,22 @@ public final class Member {
     private final LocalDate birthDate;
 
     public Member(String name, LocalDate birthDate) {
+        if(name.isBlank())
+            throw new BlankNameException(name);
+
         final LocalDate now = LocalDate.now();
         if (birthDate.isAfter(now))
             throw new FutureBirthDateException(now, birthDate);
 
         this.name = name;
         this.birthDate = birthDate;
+
+    }
+
+    public static final class BlankNameException extends RuntimeException {
+        public BlankNameException(String name) {
+            super("The given name was blank: " + name);
+        }
     }
 
     public static final class FutureBirthDateException extends RuntimeException {
