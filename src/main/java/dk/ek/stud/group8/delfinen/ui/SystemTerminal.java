@@ -20,6 +20,7 @@ public final class SystemTerminal implements Terminal {
 
     @Override
     public String readLine(String prompt) {
+        out.print(prompt + ": ");
         return in.nextLine();
     }
 }
