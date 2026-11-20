@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("US1 - Tilføj medlemmer")
 class MemberTest {
+    private final String VALID_NAME = "Simon";
     private static final LocalDate VALID_DATE =
             LocalDate.of(2002, 5, 6);
 
@@ -35,6 +36,16 @@ class MemberTest {
             assertDoesNotThrow(() -> {
                 new Member(name, VALID_DATE);
             });
+        }
+
+        @Test
+        @DisplayName("Fødselsdag i dag accepteres")
+        void shouldConstruct_whenBirthDateToday() {
+            // Arrange
+            final var now = LocalDate.now();
+
+            // Act + Assert
+            assertDoesNotThrow(() -> new Member(VALID_NAME, now));
         }
     }
 
@@ -61,15 +72,15 @@ class MemberTest {
         }
 
         @Test
-        @DisplayName("Fødselsdag i fremtiden afvises")
-        void shouldThrow_whenBirthDateInFuture() {
+        @DisplayName("Fødselsdag i morgen afvises")
+        void shouldThrow_whenBirthDateTomorrow() {
             // Arrange
             final var now = LocalDate.now();
             final var future = now.plusDays(1);
 
             // Act + Assert
             assertThrows(Member.FutureBirthDateException.class, () ->
-                    new Member("Simon", future));
+                    new Member(VALID_NAME, future));
         }
     }
 }
