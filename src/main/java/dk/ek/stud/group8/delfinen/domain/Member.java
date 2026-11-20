@@ -2,12 +2,15 @@ package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Random;
+import java.util.Set;
 
 public final class Member {
     private final String name;
     private final LocalDate birthDate;
+    private final MemberId memberId;
 
-    public Member(String name, LocalDate birthDate) {
+    public Member(String name, LocalDate birthDate, MemberId memberId) {
         if(name.isBlank())
             throw new BlankNameException(name);
 
@@ -17,6 +20,7 @@ public final class Member {
 
         this.name = Objects.requireNonNull(name);
         this.birthDate = Objects.requireNonNull(birthDate);
+        this.memberId = Objects.requireNonNull(memberId);
     }
 
     public static final class BlankNameException extends RuntimeException {

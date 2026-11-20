@@ -16,6 +16,7 @@ class MemberTest {
     private final String VALID_NAME = "Simon";
     private static final LocalDate VALID_DATE =
             LocalDate.of(2002, 5, 6);
+    private static final MemberId VALID_ID = new MemberId(1);
 
     @Nested
     @DisplayName("Gyldig")
@@ -34,7 +35,7 @@ class MemberTest {
         void shouldConstruct_whenNameIsNotBlank(String name) {
             // Act + Assert
             assertDoesNotThrow(() -> {
-                new Member(name, VALID_DATE);
+                new Member(name, VALID_DATE, VALID_ID);
             });
         }
 
@@ -45,7 +46,7 @@ class MemberTest {
             final var now = LocalDate.now();
 
             // Act + Assert
-            assertDoesNotThrow(() -> new Member(VALID_NAME, now));
+            assertDoesNotThrow(() -> new Member(VALID_NAME, now, VALID_ID));
         }
     }
 
@@ -57,7 +58,7 @@ class MemberTest {
         @DisplayName("null navn afvises")
         void shouldThrow_whenNameIsNull() {
             // Act
-            assertThrows(NullPointerException.class, () -> new Member(null, VALID_DATE));
+            assertThrows(NullPointerException.class, () -> new Member(null, VALID_DATE, VALID_ID));
         }
 
         @ParameterizedTest(name = "{0} afvises")
@@ -68,7 +69,7 @@ class MemberTest {
         })
         void shouldThrow_whenNameIsBlank(String name) {
             // Act + Assert
-            assertThrows(Member.BlankNameException.class, () -> new Member(name, VALID_DATE));
+            assertThrows(Member.BlankNameException.class, () -> new Member(name, VALID_DATE, VALID_ID));
         }
 
         @Test
@@ -80,7 +81,7 @@ class MemberTest {
 
             // Act + Assert
             assertThrows(Member.FutureBirthDateException.class, () ->
-                    new Member(VALID_NAME, future));
+                    new Member(VALID_NAME, future, VALID_ID));
         }
     }
 }
