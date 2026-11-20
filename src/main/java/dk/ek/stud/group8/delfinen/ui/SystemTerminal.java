@@ -1,0 +1,26 @@
+package dk.ek.stud.group8.delfinen.ui;
+
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.Scanner;
+
+public final class SystemTerminal implements Terminal {
+    private final Scanner in;
+    private final PrintStream out;
+
+    public SystemTerminal(InputStream in, PrintStream out) {
+        this.in = new Scanner(in);
+        this.out = out;
+    }
+
+    @Override
+    public void print(String str) {
+        out.print(str);
+    }
+
+    @Override
+    public String readLine(String prompt) {
+        out.print(prompt + ": ");
+        return in.nextLine();
+    }
+}
