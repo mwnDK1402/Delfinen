@@ -21,11 +21,15 @@ public final class Loop {
 
         var menuFactory = new MenuList.Factory(terminal);
 
-        var roleMenu = menuFactory.create(
+        String[] options = {
                 "Formand",
                 "Kasserer",
-                "Træner");
+                "Træner"};
+        var roleMenu = menuFactory.create(options);
 
-        roleMenu.choose();
+        var choiceIdx = roleMenu.choose();
+        var choice = options[choiceIdx];
+
+        terminal.println("Du valgte " + choice + "!");
     }
 }
