@@ -1,15 +1,20 @@
 package dk.ek.stud.group8.delfinen.ui;
 
+import static dk.ek.stud.group8.delfinen.ui.ANSI.*;
+
 public final class MenuList {
     private final Terminal terminal;
+    private final String title;
     private final String[] options;
 
-    public MenuList(Terminal terminal, String... options) {
+    public MenuList(Terminal terminal, String title, String... options) {
         this.terminal = terminal;
+        this.title = title;
         this.options = options;
     }
 
     public int choose() {
+        terminal.println(BOLD + title + RESET);
         for (int i = 0; i < options.length; i++) {
             terminal.println((i + 1) + ". " + options[i]);
         }
@@ -50,8 +55,8 @@ public final class MenuList {
             this.terminal = terminal;
         }
 
-        public MenuList create(String... options) {
-            return new MenuList(terminal, options);
+        public MenuList create(String title, String... options) {
+            return new MenuList(terminal, title, options);
         }
     }
 }

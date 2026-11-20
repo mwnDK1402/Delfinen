@@ -25,7 +25,7 @@ public final class Loop {
                 "Formand",
                 "Kasserer",
                 "Træner"};
-        var roleMenu = menuFactory.create(options);
+        var roleMenu = menuFactory.create("Vælg en rolle", options);
 
         var choiceIdx = roleMenu.choose();
         var choice = options[choiceIdx];
