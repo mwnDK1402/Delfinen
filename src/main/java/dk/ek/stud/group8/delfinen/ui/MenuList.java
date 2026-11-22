@@ -1,6 +1,7 @@
 package dk.ek.stud.group8.delfinen.ui;
 
-import static dk.ek.stud.group8.delfinen.ui.ANSI.*;
+import static dk.ek.stud.group8.delfinen.ui.ANSI.BOLD;
+import static dk.ek.stud.group8.delfinen.ui.ANSI.RESET;
 
 public final class MenuList {
     private final Terminal terminal;

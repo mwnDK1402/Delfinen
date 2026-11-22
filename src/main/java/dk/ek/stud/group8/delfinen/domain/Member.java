@@ -2,8 +2,6 @@ package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
 import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
 
 public final class Member {
     private final String name;
@@ -11,7 +9,7 @@ public final class Member {
     private final MemberId memberId;
 
     public Member(String name, LocalDate birthDate, MemberId memberId) {
-        if(name.isBlank())
+        if (name.isBlank())
             throw new BlankNameException(name);
 
         // TODO: Parameterize 'now' for the sake of the test suite

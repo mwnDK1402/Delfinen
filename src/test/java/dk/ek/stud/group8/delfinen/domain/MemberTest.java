@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("US1 - Tilføj medlemmer")
 class MemberTest {
-    private final String VALID_NAME = "Simon";
     private static final LocalDate VALID_DATE =
             LocalDate.of(2002, 5, 6);
     private static final MemberId VALID_ID = new MemberId(1);
+    private final String VALID_NAME = "Simon";
 
     @Nested
     @DisplayName("Gyldig")
