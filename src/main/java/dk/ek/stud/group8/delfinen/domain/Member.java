@@ -14,6 +14,7 @@ public final class Member {
         if(name.isBlank())
             throw new BlankNameException(name);
 
+        // TODO: Parameterize 'now' for the sake of the test suite
         final LocalDate now = LocalDate.now();
         if (birthDate.isAfter(now))
             throw new FutureBirthDateException(now, birthDate);
@@ -23,6 +24,7 @@ public final class Member {
         this.memberId = Objects.requireNonNull(memberId);
     }
 
+    // Should we move this into a Name class instead, wrapping the name attribute?
     public static final class BlankNameException extends RuntimeException {
         public BlankNameException(String name) {
             super("The given name was blank: " + name);

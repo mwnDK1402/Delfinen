@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 
+// TODO: Rethink this whole class
 public final class MemberId {
     private final int value;
 

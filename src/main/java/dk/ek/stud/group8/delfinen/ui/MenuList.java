@@ -25,21 +25,26 @@ public final class MenuList {
 
         int choice;
         while (true) {
+            // TODO: Receive messages through interface
             final String errorPrefix = "Ugyldigt valg: ";
 
+            // TODO: Move prompt into prompt(min, max)
             String input = terminal.readLine("INT (" + min + ".." + max + ")");
             try {
                 choice = Integer.parseInt(input);
                 if (choice < min || choice > max) {
+                    // TODO: Throwing and catching immediately is a smell; just handle here
                     throw new IndexOutOfBoundsException(choice);
                 }
 
                 break;
             } catch (NumberFormatException e) {
+                // TODO: Move into notANumber(min, max)
                 terminal.println(errorPrefix
                         + "Brug tal, ikke bogstaver. "
                         + "Tallet skal være mellem " + min + " og " + max + ".");
             } catch (IndexOutOfBoundsException e) {
+                // TODO: Move into outOfRange(min, max)
                 terminal.println(errorPrefix
                         + "Skriv et heltal mellem " + min + " og " + max + ".");
             }
