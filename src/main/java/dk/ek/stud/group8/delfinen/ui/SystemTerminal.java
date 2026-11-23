@@ -16,11 +16,16 @@ public final class SystemTerminal implements Terminal {
     @Override
     public void print(String str) {
         out.print(str);
+        out.flush();
     }
 
     @Override
-    public String readLine(String prompt) {
-        out.print(prompt + ": ");
+    public void println(String str) {
+        System.out.println(str);
+    }
+
+    @Override
+    public String readLine() {
         return in.nextLine();
     }
 }

@@ -1,21 +1,20 @@
 package dk.ek.stud.group8.delfinen.ui;
 
-import static dk.ek.stud.group8.delfinen.ui.ANSI.BOLD;
-import static dk.ek.stud.group8.delfinen.ui.ANSI.RESET;
-
 public final class MenuList {
     private final Terminal terminal;
+    private final Messages message;
     private final String title;
     private final String[] options;
 
-    public MenuList(Terminal terminal, String title, String... options) {
+    public MenuList(Terminal terminal, Messages message, String title, String... options) {
         this.terminal = terminal;
+        this.message = message;
         this.title = title;
         this.options = options;
     }
 
     public int choose() {
-        terminal.println(BOLD + title + RESET);
+        terminal.println(title);
         for (int i = 0; i < options.length; i++) {
             terminal.println((i + 1) + ". " + options[i]);
         }
@@ -24,45 +23,55 @@ public final class MenuList {
         final var min = 1;
         final var max = options.length;
 
+        // readIntInRange(min, max)
+
         int choice;
         while (true) {
-            // TODO: Receive messages through interface
-            final String errorPrefix = "Ugyldigt valg: ";
-
             // TODO: Move prompt into prompt(min, max)
-            String input = terminal.readLine("INT (" + min + ".." + max + ")");
+            terminal.println();
+            terminal.println();
+            terminal.print(ANSI.GRAY);
+            terminal.println(message.prompt(min, max));
+            terminal.print(ANSI.RESET);
+            terminal.print(ANSI.CPL(2));
+            terminal.print("> ");
+            String input = terminal.readLine();
             try {
                 choice = Integer.parseInt(input);
-                if (choice < min || choice > max) {
-                    // TODO: Throwing and catching immediately is a smell; just handle here
-                    throw new IndexOutOfBoundsException(choice);
+                if (choice >= min && choice <= max) {
+                    break;
                 }
 
-                break;
+                // Out of range
+                terminal.println(message.outOfRange(min, max, choice));
             } catch (NumberFormatException e) {
-                // TODO: Move into notANumber(min, max)
-                terminal.println(errorPrefix
-                        + "Brug tal, ikke bogstaver. "
-                        + "Tallet skal være mellem " + min + " og " + max + ".");
-            } catch (IndexOutOfBoundsException e) {
-                // TODO: Move into outOfRange(min, max)
-                terminal.println(errorPrefix
-                        + "Skriv et heltal mellem " + min + " og " + max + ".");
+                // Not a number
+                terminal.println(message.notANumber(min, max, input));
             }
         }
 
         return choice - 1;
     }
 
+    public interface Messages {
+        String prompt(int min, int max);
+
+        String notANumber(int min, int max, String actual);
+
+        String outOfRange(int min, int max, int actual);
+    }
+
     public static final class Factory {
         private final Terminal terminal;
+        private final Messages messages;
 
-        public Factory(Terminal terminal) {
+        public Factory(Terminal terminal, Messages messages) {
             this.terminal = terminal;
+            this.messages = messages;
         }
 
         public MenuList create(String title, String... options) {
-            return new MenuList(terminal, title, options);
+            return new MenuList(terminal, messages, title, options);
         }
     }
 }

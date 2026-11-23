@@ -2,15 +2,11 @@ package dk.ek.stud.group8.delfinen.ui;
 
 public interface Terminal {
     void print(String str);
-
-    default void println(String str) {
-        print(str + System.lineSeparator());
+    void println(String str);
+    default void println() {
+        println("");
     }
 
-    String readLine(String prompt);
-
-    default String readLine() {
-        return readLine("");
-    }
+    String readLine();
 }
 
