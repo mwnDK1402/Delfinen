@@ -27,7 +27,6 @@ public final class MenuList {
 
         int choice;
         while (true) {
-            // TODO: Move prompt into prompt(min, max)
             terminal.println();
             terminal.println();
             terminal.print(ANSI.GRAY);
