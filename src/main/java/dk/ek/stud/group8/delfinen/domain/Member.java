@@ -22,6 +22,10 @@ public final class Member {
         this.memberId = Objects.requireNonNull(memberId);
     }
 
+    public MemberId getMemberId() {
+        return memberId;
+    }
+
     // Should we move this into a Name class instead, wrapping the name attribute?
     public static final class BlankNameException extends RuntimeException {
         public BlankNameException(String name) {
