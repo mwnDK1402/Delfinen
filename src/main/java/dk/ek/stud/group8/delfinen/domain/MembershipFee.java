@@ -30,4 +30,20 @@ public class MembershipFee {
     public int getAmount() {
         return amount;
     }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid() {
+        this.paid = paid;
+    }
 }
