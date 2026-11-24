@@ -18,12 +18,12 @@ public class MembershipFee {
 
         if (member.isPassive()) {
             amount = 500;
-        } else if (member.getSeniority(now).equals(Seniority.Junior)) {
+        } else if (member.getSeniority(now) == Seniority.Junior) {
             amount = 1000;
-        } else if (member.getSeniority(now).equals(Seniority.Senior) && member.getAgeInYears(now) <= 59) {
-            amount = 1600;
-        } else if (member.getSeniority(now).equals(Seniority.Senior) && member.getAgeInYears(now) >= 60) {
+        } else if (member.getAgeInYears(now) >= 60) {
             amount = 1200;
+        } else {
+            amount = 1600;
         }
     }
 
