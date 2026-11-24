@@ -2,13 +2,15 @@ package dk.ek.stud.group8.delfinen.ui;
 
 public final class MenuList {
     private final Terminal terminal;
-    private final Messages message;
+    private final Messages messages;
+    private final Prompter prompter;
     private final String title;
     private final String[] options;
 
-    public MenuList(Terminal terminal, Messages message, String title, String... options) {
+    public MenuList(Terminal terminal, Messages messages, Prompter prompter, String title, String... options) {
         this.terminal = terminal;
-        this.message = message;
+        this.messages = messages;
+        this.prompter = prompter;
         this.title = title;
         this.options = options;
     }
@@ -23,31 +25,18 @@ public final class MenuList {
         final var min = 1;
         final var max = options.length;
 
-        // readIntInRange(min, max)
-
-        int choice;
-        while (true) {
-            terminal.println();
-            terminal.println();
-            terminal.print(ANSI.GRAY);
-            terminal.println(message.prompt(min, max));
-            terminal.print(ANSI.RESET);
-            terminal.print(ANSI.CPL(2));
-            terminal.print("> ");
-            String input = terminal.readLine();
+        int choice = prompter.ask(messages.prompt(min, max), input -> {
             try {
-                choice = Integer.parseInt(input);
-                if (choice >= min && choice <= max) {
-                    break;
+                var parsed = Integer.parseInt(input);
+                if (parsed >= min && parsed <= max) {
+                    return new Result.Ok<>(parsed);
                 }
 
-                // Out of range
-                terminal.println(message.outOfRange(min, max, choice));
+                return new Result.Err<>(messages.outOfRange(min, max, parsed));
             } catch (NumberFormatException e) {
-                // Not a number
-                terminal.println(message.notANumber(min, max, input));
+                return new Result.Err<>(messages.notANumber(min, max, input));
             }
-        }
+        });
 
         return choice - 1;
     }
@@ -63,14 +52,16 @@ public final class MenuList {
     public static final class Factory {
         private final Terminal terminal;
         private final Messages messages;
+        private final Prompter prompter;
 
-        public Factory(Terminal terminal, Messages messages) {
+        public Factory(Terminal terminal, Messages messages, Prompter prompter) {
             this.terminal = terminal;
             this.messages = messages;
+            this.prompter = prompter;
         }
 
         public MenuList create(String title, String... options) {
-            return new MenuList(terminal, messages, title, options);
+            return new MenuList(terminal, messages, prompter, title, options);
         }
     }
 }
