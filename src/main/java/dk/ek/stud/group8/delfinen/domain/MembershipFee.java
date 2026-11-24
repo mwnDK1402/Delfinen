@@ -14,8 +14,17 @@ public class MembershipFee {
     public MembershipFee(LocalDate now, Member member) {
         startDate = now;
         endDate = now.plusYears(1);
-        amount = 1600;
         paid = false;
+
+        if (member.isPassive()) {
+            amount = 500;
+        } else if (member.getSeniority(now).equals(Seniority.Junior)) {
+            amount = 1000;
+        } else if (member.getSeniority(now).equals(Seniority.Senior) && member.getAgeInYears(now) <= 59) {
+            amount = 1600;
+        } else if (member.getSeniority(now).equals(Seniority.Senior) && member.getAgeInYears(now) >= 60) {
+            amount = 1200;
+        }
     }
 
     public int getAmount() {
