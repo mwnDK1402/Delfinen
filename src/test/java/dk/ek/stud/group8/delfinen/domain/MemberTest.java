@@ -35,7 +35,7 @@ class MemberTest {
         void shouldConstruct_whenNameIsNotBlank(String name) {
             // Act + Assert
             assertDoesNotThrow(() -> {
-                new Member(name, VALID_DATE, VALID_ID);
+                new Member(name, VALID_DATE, VALID_ID, null);
             });
         }
 
@@ -46,7 +46,7 @@ class MemberTest {
             final var now = LocalDate.now();
 
             // Act + Assert
-            assertDoesNotThrow(() -> new Member(VALID_NAME, now, VALID_ID));
+            assertDoesNotThrow(() -> new Member(VALID_NAME, now, VALID_ID, null));
         }
     }
 
@@ -58,7 +58,7 @@ class MemberTest {
         @DisplayName("null navn afvises")
         void shouldThrow_whenNameIsNull() {
             // Act
-            assertThrows(NullPointerException.class, () -> new Member(null, VALID_DATE, VALID_ID));
+            assertThrows(NullPointerException.class, () -> new Member(null, VALID_DATE, VALID_ID, null));
         }
 
         @ParameterizedTest(name = "{0} afvises")
@@ -69,7 +69,7 @@ class MemberTest {
         })
         void shouldThrow_whenNameIsBlank(String name) {
             // Act + Assert
-            assertThrows(Member.BlankNameException.class, () -> new Member(name, VALID_DATE, VALID_ID));
+            assertThrows(Member.BlankNameException.class, () -> new Member(name, VALID_DATE, VALID_ID, null));
         }
 
         @Test
@@ -81,7 +81,7 @@ class MemberTest {
 
             // Act + Assert
             assertThrows(Member.FutureBirthDateException.class, () ->
-                    new Member(VALID_NAME, future, VALID_ID));
+                    new Member(VALID_NAME, future, VALID_ID, null));
         }
     }
 
@@ -98,7 +98,7 @@ class MemberTest {
                 int expectedAgeInYears, LocalDate birthDate, LocalDate currentDate) {
 
             // Arrange
-            Member member = new Member("TestName", birthDate, new MemberId(5));
+            Member member = new Member("TestName", birthDate, new MemberId(5), null);
 
             // Act
             var age = member.getAgeInYears(currentDate);

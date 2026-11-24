@@ -17,7 +17,7 @@ public final class MemberRegistry {
 
     public Member register(String name, LocalDate birthDate) {
         var id = nextId();
-        var member = new Member(name, birthDate, id);
+        var member = new Member(name, birthDate, id, null);
         membersById.put(id, member);
         return member;
     }
