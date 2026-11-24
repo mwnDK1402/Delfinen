@@ -9,12 +9,11 @@ public final class Member {
     private final MemberId memberId;
     private ActivityType activityType;
 
-    public Member(String name, LocalDate birthDate, MemberId memberId, ActivityType activityType) {
+    public Member(LocalDate now, String name, LocalDate birthDate, MemberId memberId, ActivityType activityType) {
         if (name.isBlank())
             throw new BlankNameException(name);
 
         // TODO: Parameterize 'now' for the sake of the test suite
-        final LocalDate now = LocalDate.now();
         if (birthDate.isAfter(now))
             throw new FutureBirthDateException(now, birthDate);
 
@@ -34,6 +33,12 @@ public final class Member {
 
     public boolean isPassive() {
         return activityType == null;
+    }
+
+    public Seniority getSeniority(LocalDate now) {
+        return getAgeInYears(now) >= 18
+                ? Seniority.Senior
+                : Seniority.Junior;
     }
 
     public ActivityType getActivityType() {

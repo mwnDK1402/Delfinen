@@ -15,9 +15,9 @@ public final class MemberRegistry {
         // TODO: Load members from CSV file
     }
 
-    public Member register(String name, LocalDate birthDate) {
+    public Member register(LocalDate now, String name, LocalDate birthDate) {
         var id = nextId();
-        var member = new Member(name, birthDate, id, null);
+        var member = new Member(now, name, birthDate, id, null);
         membersById.put(id, member);
         return member;
     }
@@ -40,7 +40,7 @@ public final class MemberRegistry {
         MemberRegistry memberRegistry = new MemberRegistry(new Random());
 
         for(int i = 0; i < 100; i++){
-            Member member = memberRegistry.register("Tobias", LocalDate.of(2000, 05, 05));
+            Member member = memberRegistry.register(LocalDate.now(), "Tobias", LocalDate.of(2000, 05, 05));
             System.out.printf("%04d%n", member.getMemberId().value());
         }
     }

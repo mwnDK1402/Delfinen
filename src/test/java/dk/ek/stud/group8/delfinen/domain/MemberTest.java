@@ -17,6 +17,7 @@ class MemberTest {
             LocalDate.of(2002, 5, 6);
     private static final MemberId VALID_ID = new MemberId(1);
     private final String VALID_NAME = "Simon";
+    private static final LocalDate now = LocalDate.of(2026, 1, 1);
 
     @Nested
     @DisplayName("Gyldig")
@@ -35,18 +36,15 @@ class MemberTest {
         void shouldConstruct_whenNameIsNotBlank(String name) {
             // Act + Assert
             assertDoesNotThrow(() -> {
-                new Member(name, VALID_DATE, VALID_ID, null);
+                new Member(now, name, VALID_DATE, VALID_ID, null);
             });
         }
 
         @Test
         @DisplayName("Fødselsdag i dag accepteres")
         void shouldConstruct_whenBirthDateToday() {
-            // Arrange
-            final var now = LocalDate.now();
-
             // Act + Assert
-            assertDoesNotThrow(() -> new Member(VALID_NAME, now, VALID_ID, null));
+            assertDoesNotThrow(() -> new Member(now, VALID_NAME, now, VALID_ID, null));
         }
     }
 
@@ -58,7 +56,7 @@ class MemberTest {
         @DisplayName("null navn afvises")
         void shouldThrow_whenNameIsNull() {
             // Act
-            assertThrows(NullPointerException.class, () -> new Member(null, VALID_DATE, VALID_ID, null));
+            assertThrows(NullPointerException.class, () -> new Member(now, null, VALID_DATE, VALID_ID, null));
         }
 
         @ParameterizedTest(name = "{0} afvises")
@@ -69,19 +67,18 @@ class MemberTest {
         })
         void shouldThrow_whenNameIsBlank(String name) {
             // Act + Assert
-            assertThrows(Member.BlankNameException.class, () -> new Member(name, VALID_DATE, VALID_ID, null));
+            assertThrows(Member.BlankNameException.class, () -> new Member(now, name, VALID_DATE, VALID_ID, null));
         }
 
         @Test
         @DisplayName("Fødselsdag i morgen afvises")
         void shouldThrow_whenBirthDateTomorrow() {
             // Arrange
-            final var now = LocalDate.now();
             final var future = now.plusDays(1);
 
             // Act + Assert
             assertThrows(Member.FutureBirthDateException.class, () ->
-                    new Member(VALID_NAME, future, VALID_ID, null));
+                    new Member(now, VALID_NAME, future, VALID_ID, null));
         }
     }
 
@@ -98,7 +95,7 @@ class MemberTest {
                 int expectedAgeInYears, LocalDate birthDate, LocalDate currentDate) {
 
             // Arrange
-            Member member = new Member("TestName", birthDate, new MemberId(5), null);
+            Member member = new Member(now, "TestName", birthDate, new MemberId(5), null);
 
             // Act
             var age = member.getAgeInYears(currentDate);

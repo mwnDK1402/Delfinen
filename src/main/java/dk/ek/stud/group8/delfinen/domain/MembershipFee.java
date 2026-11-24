@@ -17,4 +17,8 @@ public class MembershipFee {
         amount = 1600;
         paid = false;
     }
+
+    public int getAmount() {
+        return amount;
+    }
 }
