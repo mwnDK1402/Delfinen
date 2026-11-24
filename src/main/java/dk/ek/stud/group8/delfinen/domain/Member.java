@@ -7,8 +7,9 @@ public final class Member {
     private final String name;
     private final LocalDate birthDate;
     private final MemberId memberId;
+    private ActivityType activityType;
 
-    public Member(String name, LocalDate birthDate, MemberId memberId) {
+    public Member(String name, LocalDate birthDate, MemberId memberId, ActivityType activityType) {
         if (name.isBlank())
             throw new BlankNameException(name);
 
@@ -20,6 +21,7 @@ public final class Member {
         this.name = Objects.requireNonNull(name);
         this.birthDate = Objects.requireNonNull(birthDate);
         this.memberId = Objects.requireNonNull(memberId);
+        this.activityType = activityType;
     }
 
     public MemberId getMemberId() {
@@ -28,6 +30,18 @@ public final class Member {
 
     public int getAgeInYears(LocalDate now) {
         return birthDate.until(now).getYears();
+    }
+
+    public boolean isPassive() {
+        return activityType == null;
+    }
+
+    public ActivityType getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(ActivityType activityType) {
+        this.activityType = activityType;
     }
 
     // Should we move this into a Name class instead, wrapping the name attribute?
