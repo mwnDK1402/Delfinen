@@ -4,12 +4,12 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("US1 - Tilføj medlemmer")
 class MemberTest {
@@ -82,6 +82,29 @@ class MemberTest {
             // Act + Assert
             assertThrows(Member.FutureBirthDateException.class, () ->
                     new Member(VALID_NAME, future, VALID_ID));
+        }
+    }
+
+    @Nested
+    @DisplayName("Medlemmets alder")
+    class Age {
+        @ParameterizedTest(name = "Hvis dags dato er {2} og man er født {1}, så er man {0} år")
+        @CsvSource(value = {
+                "27,1999-02-14,2026-11-24",
+                "26,1999-02-14,2026-01-01"
+        })
+        @DisplayName("Aldre passer med fødselsdagsdato")
+        void shouldReturnAge_givenBirthDateAndCurrentDate(
+                int expectedAgeInYears, LocalDate birthDate, LocalDate currentDate) {
+
+            // Arrange
+            Member member = new Member("TestName", birthDate, new MemberId(5));
+
+            // Act
+            var age = member.getAgeInYears(currentDate);
+
+            // Assert
+            assertEquals(expectedAgeInYears, age);
         }
     }
 }

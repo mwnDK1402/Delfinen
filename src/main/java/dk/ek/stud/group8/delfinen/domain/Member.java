@@ -26,6 +26,10 @@ public final class Member {
         return memberId;
     }
 
+    public int getAgeInYears(LocalDate now) {
+        return birthDate.until(now).getYears();
+    }
+
     // Should we move this into a Name class instead, wrapping the name attribute?
     public static final class BlankNameException extends RuntimeException {
         public BlankNameException(String name) {
