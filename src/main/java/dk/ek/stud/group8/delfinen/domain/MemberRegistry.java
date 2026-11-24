@@ -32,4 +32,16 @@ public final class MemberRegistry {
 
         return id;
     }
+
+    /**
+     * Print a number of member ids padded to 4 digits.
+     */
+    static void main() {
+        MemberRegistry memberRegistry = new MemberRegistry(new Random());
+
+        for(int i = 0; i < 100; i++){
+            Member member = memberRegistry.register("Tobias", LocalDate.of(2000, 05, 05));
+            System.out.printf("%04d%n", member.getMemberId().value());
+        }
+    }
 }
