@@ -43,7 +43,7 @@ public class MembershipFee {
         return paid;
     }
 
-    public void setPaid() {
-        this.paid = paid;
+    public void markAsPaid() {
+        this.paid = true;
     }
 }
