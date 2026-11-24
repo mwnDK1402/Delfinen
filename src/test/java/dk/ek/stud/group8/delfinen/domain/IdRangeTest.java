@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Medlemsnumre")
 class IdRangeTest {
-    @DisplayName("Genereres inden for dette interval for det angivne antal")
+    @DisplayName("Genereres inden for dette interval for det angivne antal medlemmer")
     @ParameterizedTest(name = "{0} numre: {1}..<{2}")
     @CsvSource(value = {
             "0,1,10000", "999,1,10000",
