@@ -6,9 +6,9 @@ import java.time.LocalDate;
  * Medlemskabskontingent for en periode (Danish: <i>Kontingent</i>)
  */
 public class MembershipFee {
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private int amount;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
+    private final int amount;
     private boolean paid;
 
     public MembershipFee(LocalDate now, Member member) {
