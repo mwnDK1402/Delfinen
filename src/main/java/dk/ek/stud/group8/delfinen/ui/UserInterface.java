@@ -90,12 +90,11 @@ public class UserInterface {
         System.out.println("Alle medlemmer:");
 
         ArrayList<Member> members = controller.getMembers();
-        for (Member m: members) {
-            System.out.println("Navn: " + m.getName());
-
         if (members.isEmpty()) {
             System.out.println("Listen er tom.");
         }
+        for (Member m : members) {
+            System.out.println("Navn: " + m.getName());
         }
     }
 
@@ -193,12 +192,15 @@ public class UserInterface {
             System.out.println("Medlemskab:");
             System.out.println("1. Aktivt");
             System.out.println("2. Passivt");
-            System.out.println("3. tilbage"); // skal fikses
 
             int choice = readInt("Valg: ");
             switch (choice) {
-                case 1 -> { return MembershipType.ACTIVE; }
-                case 2 -> { return MembershipType.PASSIVE; }
+                case 1 -> {
+                    return MembershipType.ACTIVE;
+                }
+                case 2 -> {
+                    return MembershipType.PASSIVE;
+                }
                 default -> System.out.println("Ugyldigt valg.");
             }
         }
@@ -209,12 +211,15 @@ public class UserInterface {
             System.out.println("Aktivitetsform:");
             System.out.println("1. Motionist");
             System.out.println("2. Konkurrencesvømmer");
-            System.out.println("3. Tilbage");
 
             int choice = readInt("Valg: ");
             switch (choice) {
-                case 1 -> { return ActivityType.Recreational; }
-                case 2 -> { return ActivityType.Competitive; }
+                case 1 -> {
+                    return ActivityType.Recreational;
+                }
+                case 2 -> {
+                    return ActivityType.Competitive;
+                }
                 default -> System.out.println("Ugyldigt valg.");
             }
         }
