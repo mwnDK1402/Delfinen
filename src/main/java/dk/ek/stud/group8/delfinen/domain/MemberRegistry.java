@@ -22,23 +22,28 @@ public final class MemberRegistry {
         for (int i = 0; i < 100; i++) {
             Member member = memberRegistry.register(
                     LocalDate.now(),
-                    "Tobias", LocalDate.of(2000, 05, 05),
-                    MembershipType.PASSIVE,
-                    null,
-                    List.of());
+                    LocalDate.now(),
+                    "Tobias",
+                    LocalDate.of(2000, 5, 5),
+                    new MembershipType.Passive());
             System.out.printf("%04d%n", member.getMemberId().value());
         }
     }
 
     public Member register(
+            LocalDate now,
             LocalDate joinDate,
             String name,
             LocalDate birthDate,
-            MembershipType membershipType,
-            ActivityType activityType,
-            List<Discipline> disciplines) {
+            MembershipType membershipType) {
         var id = nextId();
-        Member member = new Member(id, name, birthDate, membershipType, activityType, disciplines, joinDate);
+        Member member = new Member(
+                now,
+                joinDate,
+                id,
+                name,
+                birthDate,
+                membershipType);
         membersById.put(id, member);
         return member;
     }

@@ -1,66 +1,42 @@
 package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public final class Member {
+    private final LocalDate joinDate;
+    private final MemberId memberId;
     private final String name;
     private final LocalDate birthDate;
-    private final MemberId memberId;
     private MembershipType membershipType;
-    private ActivityType activityType;
-    private ArrayList<Discipline> disciplines;
-    private final LocalDate joinDate;
-
-    /*public Member(String name, LocalDate birthDate, MemberId memberId, ActivityType activityType, LocalDate now) {
-        if (name.isBlank())
-            throw new BlankNameException(name);
-
-        // TODO: Parameterize 'now' for the sake of the test suite
-        if (birthDate.isAfter(now))
-            throw new FutureBirthDateException(now, birthDate);
-
-        this.name = Objects.requireNonNull(name);
-        this.birthDate = Objects.requireNonNull(birthDate);
-        this.memberId = Objects.requireNonNull(memberId);
-        this.activityType = activityType;
-    }*/
 
     public Member(
+            LocalDate now,
+            LocalDate joinDate,
             MemberId memberId,
             String name,
             LocalDate birthDate,
-            MembershipType membershipType,
-            ActivityType activityType,
-            List<Discipline> disciplines,
-            LocalDate joinDate) {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("Navn må ikke være tomt");
-        }
-        if (birthDate.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("Fødselsdatoen kan ikke ligge i fremtiden");
-        }
-        if (membershipType == MembershipType.PASSIVE && activityType != null) {
-            throw new IllegalArgumentException("Passive medlemmer har ingen aktivitetsform");
-        }
-        if (membershipType == MembershipType.ACTIVE && activityType == null) {
-            throw new IllegalArgumentException("Aktive medlemmer skal have en aktivitetsform");
-        }
-        if (activityType == ActivityType.Competitive && disciplines.isEmpty()) {
-            throw new IllegalArgumentException("Konkurrencesvømmer skal have mindst én disciplin");
-        }
-        if (activityType != ActivityType.Competitive && !disciplines.isEmpty()) {
-            throw new IllegalArgumentException("Kun konkurrencesvømmere kan have discipliner");
+            MembershipType membershipType) {
+        if (name.isBlank()) {
+            throw new BlankNameException(name);
         }
 
-        this.name = name;
-        this.birthDate = birthDate;
-        this.membershipType = membershipType;
-        this.memberId = memberId;
-        this.activityType = activityType;
-        this.disciplines = new ArrayList<>(disciplines);
-        this.joinDate = joinDate;
+        if (birthDate.isAfter(now)) {
+            throw new FutureBirthDateException(now, birthDate);
+        }
+
+        if (membershipType instanceof MembershipType.Active(ActivityType type)
+                && type instanceof ActivityType.Competitive(List<Discipline> disciplines)
+                && disciplines.isEmpty()) {
+            throw new IllegalArgumentException("Konkurrencesvømmer skal have mindst én disciplin");
+        }
+
+        this.joinDate = Objects.requireNonNull(joinDate);
+        this.memberId = Objects.requireNonNull(memberId);
+        this.name = Objects.requireNonNull(name);
+        this.birthDate = Objects.requireNonNull(birthDate);
+        this.membershipType = Objects.requireNonNull(membershipType);
     }
 
     public String getName() {
@@ -72,25 +48,25 @@ public final class Member {
     }
 
     public int getAgeInYears(LocalDate now) {
-        return birthDate.until(now).getYears();
+        return birthDate.until(Objects.requireNonNull(now)).getYears();
     }
 
     public boolean isPassive() {
-        return activityType == null;
+        return membershipType instanceof MembershipType.Passive;
     }
 
     public Seniority getSeniority(LocalDate now) {
-        return getAgeInYears(now) >= 18
+        return getAgeInYears(Objects.requireNonNull(now)) >= 18
                 ? Seniority.Senior
                 : Seniority.Junior;
     }
 
-    public ActivityType getActivityType() {
-        return activityType;
+    public MembershipType getMembershipType() {
+        return membershipType;
     }
 
-    public void setActivityType(ActivityType activityType) {
-        this.activityType = activityType;
+    public void setMembershipType(MembershipType membershipType) {
+        this.membershipType = Objects.requireNonNull(membershipType);
     }
 
     // Should we move this into a Name class instead, wrapping the name attribute?

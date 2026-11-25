@@ -1,6 +1,8 @@
 package dk.ek.stud.group8.delfinen.controller;
 
-import dk.ek.stud.group8.delfinen.domain.*;
+import dk.ek.stud.group8.delfinen.domain.Member;
+import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
+import dk.ek.stud.group8.delfinen.domain.MembershipType;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,13 +19,12 @@ public class Controller {
     }
 
     public void addMember(
+            LocalDate now,
             LocalDate joinDate,
             String name,
             LocalDate birthDate,
-            MembershipType membershipType,
-            ActivityType activityType,
-            List<Discipline> disciplines) {
-        memberRegistry.register(joinDate, name, birthDate, membershipType, activityType, disciplines);
+            MembershipType membershipType) {
+        memberRegistry.register(now, joinDate, name, birthDate, membershipType);
         // TODO: storage.saveAll();
     }
 

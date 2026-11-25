@@ -67,21 +67,22 @@ public class UserInterface {
     public void createMember() {
         String name = readNonEmptyString("Navn: ");
         LocalDate birthDate = readBirthDate("Fødselsdato (YYYY-MM-dd): ");
-        MembershipType membershipType = askForMembershipType(); // Spørger efter aktiv eller passiv
-        ActivityType activityType = null;
-        ArrayList<Discipline> disciplines = new ArrayList<>();
+        MembershipActivityStatus membershipType = askForMembershipType(); // Spørger efter aktiv eller passiv
+        ActivityType activityType = null; // Motionist eller konkurrencesvømmer
 
-        if (membershipType == membershipType.ACTIVE) {
-            activityType = askForActivityType(); // Motionist eller konkurrencesvømmer
-            if (activityType == activityType.Competitive) {
-                disciplines = askForDisciplines();
-            } else {
-                disciplines = new ArrayList<>();
+        if (membershipType == MembershipActivityStatus.ACTIVE) {
+            activityType = askForActivityType();
+            if (activityType instanceof ActivityType.Competitive(List<Discipline> disciplines)) {
+                disciplines.addAll(askForDisciplines());
             }
         }
 
         try {
-            controller.addMember(LocalDate.now(), name, birthDate, membershipType, activityType, disciplines);
+            var realMembershipType = switch (membershipType) {
+                case ACTIVE -> new MembershipType.Active(activityType);
+                case PASSIVE -> new MembershipType.Passive();
+            };
+            controller.addMember(LocalDate.now(), LocalDate.now(), name, birthDate, realMembershipType);
             System.out.println(name + " er oprettet.");
         } catch (IllegalArgumentException e) {
             System.out.println("Medlemmet kunne ikke oprettes: " + e.getMessage());
@@ -189,7 +190,7 @@ public class UserInterface {
         }
     }
 
-    private MembershipType askForMembershipType() {
+    private MembershipActivityStatus askForMembershipType() {
         while (true) {
             System.out.println("Medlemskab:");
             System.out.println("1. Aktivt");
@@ -198,10 +199,10 @@ public class UserInterface {
             int choice = readInt("Valg: ");
             switch (choice) {
                 case 1 -> {
-                    return MembershipType.ACTIVE;
+                    return MembershipActivityStatus.ACTIVE;
                 }
                 case 2 -> {
-                    return MembershipType.PASSIVE;
+                    return MembershipActivityStatus.PASSIVE;
                 }
                 default -> System.out.println("Ugyldigt valg.");
             }
@@ -217,13 +218,18 @@ public class UserInterface {
             int choice = readInt("Valg: ");
             switch (choice) {
                 case 1 -> {
-                    return ActivityType.Recreational;
+                    return new ActivityType.Recreational();
                 }
                 case 2 -> {
-                    return ActivityType.Competitive;
+                    return new ActivityType.Competitive(new ArrayList<>());
                 }
                 default -> System.out.println("Ugyldigt valg.");
             }
         }
+    }
+
+    enum MembershipActivityStatus {
+        ACTIVE,
+        PASSIVE
     }
 }
