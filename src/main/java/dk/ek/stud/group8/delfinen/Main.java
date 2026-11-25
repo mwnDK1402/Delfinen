@@ -1,5 +1,6 @@
 package dk.ek.stud.group8.delfinen;
 
+import dk.ek.stud.group8.delfinen.controller.Controller;
 import dk.ek.stud.group8.delfinen.i18n.DanishMessages;
 import dk.ek.stud.group8.delfinen.presentation.Loop;
 import dk.ek.stud.group8.delfinen.presentation.StyledMessages;
@@ -12,7 +13,8 @@ public class Main {
         MenuList.Factory menuFactory = new MenuList.Factory(terminal, messages, new Prompter(terminal));
         new Loop(terminal, menuFactory).start();*/
 
-        UserInterface ui = new UserInterface();
+        var controller = new Controller();
+        UserInterface ui = new UserInterface(System.in, controller);
         ui.start();
     }
 }

@@ -6,19 +6,20 @@ import dk.ek.stud.group8.delfinen.domain.Discipline;
 import dk.ek.stud.group8.delfinen.domain.Member;
 import dk.ek.stud.group8.delfinen.domain.MembershipType;
 
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class UserInterface {
+    private final Scanner scanner;
+    private final Controller controller;
 
-    private Scanner scanner;
-    private Controller controller;
-
-    public UserInterface() {
-        scanner = new Scanner(System.in);
-        controller = new Controller();
+    public UserInterface(InputStream in, Controller controller) {
+        scanner = new Scanner(Objects.requireNonNull(in));
+        this.controller = Objects.requireNonNull(controller);
     }
 
     public void start() {
