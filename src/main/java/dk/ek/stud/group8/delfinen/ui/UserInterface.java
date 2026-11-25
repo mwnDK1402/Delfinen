@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
@@ -80,7 +81,7 @@ public class UserInterface {
         }
 
         try {
-            controller.addMember(name, birthDate, membershipType, activityType, disciplines, LocalDate.now());
+            controller.addMember(LocalDate.now(), name, birthDate, membershipType, activityType, disciplines);
             System.out.println(name + " er oprettet.");
         } catch (IllegalArgumentException e) {
             System.out.println("Medlemmet kunne ikke oprettes: " + e.getMessage());
@@ -90,7 +91,7 @@ public class UserInterface {
     private void showAllMembers() {
         System.out.println("Alle medlemmer:");
 
-        ArrayList<Member> members = controller.getMembers();
+        List<Member> members = controller.getMembers();
         if (members.isEmpty()) {
             System.out.println("Listen er tom.");
         }

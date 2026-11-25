@@ -3,32 +3,32 @@ package dk.ek.stud.group8.delfinen.controller;
 import dk.ek.stud.group8.delfinen.domain.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Controller {
     // TODO: private final DataStorage storage;
-    private final MemberRegister memberRegister;
+    private final MemberRegistry memberRegistry;
 
-    public Controller(MemberRegister memberRegister) {
+    public Controller(MemberRegistry memberRegistry) {
         // TODO: this.storage = new DataStorage("data");
         // TODO: this.memberRegister = storage.loadAll();
-        this.memberRegister = Objects.requireNonNull(memberRegister);
+        this.memberRegistry = Objects.requireNonNull(memberRegistry);
     }
 
     public void addMember(
+            LocalDate joinDate,
             String name,
             LocalDate birthDate,
             MembershipType membershipType,
             ActivityType activityType,
-            ArrayList<Discipline> disciplines,
-            LocalDate now) {
-        memberRegister.addMember(name, birthDate, membershipType, activityType, disciplines, now);
+            List<Discipline> disciplines) {
+        memberRegistry.register(joinDate, name, birthDate, membershipType, activityType, disciplines);
         // TODO: storage.saveAll();
     }
 
-    public ArrayList<Member> getMembers() {
-        return memberRegister.getMembers();
+    public List<Member> getMembers() {
+        return memberRegistry.getMembers();
     }
 
     // TODO:

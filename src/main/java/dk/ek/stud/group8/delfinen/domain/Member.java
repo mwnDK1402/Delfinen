@@ -2,12 +2,12 @@ package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Objects;
+import java.util.List;
 
 public final class Member {
     private final String name;
     private final LocalDate birthDate;
-    private final int memberId;
+    private final MemberId memberId;
     private MembershipType membershipType;
     private ActivityType activityType;
     private ArrayList<Discipline> disciplines;
@@ -27,8 +27,14 @@ public final class Member {
         this.activityType = activityType;
     }*/
 
-    public Member(int memberId, String name, LocalDate birthDate, MembershipType membershipType,
-                  ActivityType activityType, ArrayList<Discipline> disciplines, LocalDate joinDate) {
+    public Member(
+            MemberId memberId,
+            String name,
+            LocalDate birthDate,
+            MembershipType membershipType,
+            ActivityType activityType,
+            List<Discipline> disciplines,
+            LocalDate joinDate) {
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("Navn må ikke være tomt");
         }
@@ -53,7 +59,7 @@ public final class Member {
         this.membershipType = membershipType;
         this.memberId = memberId;
         this.activityType = activityType;
-        this.disciplines = disciplines;
+        this.disciplines = new ArrayList<>(disciplines);
         this.joinDate = joinDate;
     }
 
@@ -61,7 +67,7 @@ public final class Member {
         return name;
     }
 
-    public int getMemberId() {
+    public MemberId getMemberId() {
         return memberId;
     }
 
