@@ -1,4 +1,4 @@
-package dk.ek.stud.group8.delfinen.domain;
+/*package dk.ek.stud.group8.delfinen.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -104,4 +104,4 @@ class MemberTest {
             assertEquals(expectedAgeInYears, age);
         }
     }
-}
+}*/

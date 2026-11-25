@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public final class MemberRegistry {
+/*public final class MemberRegistry {
     private final Random rng;
     private final Map<MemberId, Member> membersById;
 
@@ -33,9 +33,9 @@ public final class MemberRegistry {
         return id;
     }
 
-    /**
+    *//**
      * Print a number of member ids padded to 4 digits.
-     */
+     *//*
     static void main() {
         MemberRegistry memberRegistry = new MemberRegistry(new Random());
 
@@ -44,4 +44,4 @@ public final class MemberRegistry {
             System.out.printf("%04d%n", member.getMemberId().value());
         }
     }
-}
+}*/

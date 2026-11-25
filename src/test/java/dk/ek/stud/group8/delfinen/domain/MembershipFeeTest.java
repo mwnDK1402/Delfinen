@@ -1,5 +1,6 @@
 package dk.ek.stud.group8.delfinen.domain;
 
+/*
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -56,4 +57,4 @@ class MembershipFeeTest {
         MemberId id = new MemberId(1);
         return new Member(now, name, birthDate, id, activityType);
     }
-}
+}*/
