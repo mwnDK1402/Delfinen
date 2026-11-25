@@ -24,7 +24,7 @@ public class UserInterface {
 
     public void start() {
         boolean running = true;
-        // loadMembers();
+        // TODO: loadMembers();
 
         while (running) {
             System.out.println("==== Svømmeklubben Delfinen ====");
