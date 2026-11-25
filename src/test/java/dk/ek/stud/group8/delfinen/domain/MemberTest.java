@@ -1,4 +1,4 @@
-/*package dk.ek.stud.group8.delfinen.domain;
+package dk.ek.stud.group8.delfinen.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,13 +11,14 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@SuppressWarnings({"UnnecessaryLocalVariable", "ConstantValue"})
 @DisplayName("US1 - Tilføj medlemmer")
 class MemberTest {
-    private static final LocalDate VALID_DATE =
-            LocalDate.of(2002, 5, 6);
+    private static final LocalDate VALID_DATE = LocalDate.of(2002, 5, 6);
     private static final MemberId VALID_ID = new MemberId(1);
-    private final String VALID_NAME = "Simon";
     private static final LocalDate now = LocalDate.of(2026, 1, 1);
+    private static final String VALID_NAME = "TestName";
+    private static final MembershipType PASSIVE = new MembershipType.Passive();
 
     @Nested
     @DisplayName("Gyldig")
@@ -35,16 +36,31 @@ class MemberTest {
         })
         void shouldConstruct_whenNameIsNotBlank(String name) {
             // Act + Assert
-            assertDoesNotThrow(() -> {
-                new Member(now, name, VALID_DATE, VALID_ID, null);
-            });
+            assertDoesNotThrow(() -> new Member(
+                    now,
+                    VALID_ID,
+                    name,
+                    VALID_DATE,
+                    PASSIVE,
+                    VALID_DATE)
+            );
         }
 
         @Test
         @DisplayName("Fødselsdag i dag accepteres")
         void shouldConstruct_whenBirthDateToday() {
+            // Arrange
+            final var birthDate = now;
+
             // Act + Assert
-            assertDoesNotThrow(() -> new Member(now, VALID_NAME, now, VALID_ID, null));
+            assertDoesNotThrow(() -> new Member(
+                    now,
+                    VALID_ID,
+                    VALID_NAME,
+                    birthDate,
+                    PASSIVE,
+                    VALID_DATE)
+            );
         }
     }
 
@@ -55,8 +71,18 @@ class MemberTest {
         @Test
         @DisplayName("null navn afvises")
         void shouldThrow_whenNameIsNull() {
-            // Act
-            assertThrows(NullPointerException.class, () -> new Member(now, null, VALID_DATE, VALID_ID, null));
+            // Arrange
+            String name = null;
+
+            // Act + Assert
+            assertThrows(NullPointerException.class, () -> new Member(
+                    now,
+                    VALID_ID,
+                    name,
+                    VALID_DATE,
+                    PASSIVE,
+                    VALID_DATE)
+            );
         }
 
         @ParameterizedTest(name = "{0} afvises")
@@ -67,18 +93,31 @@ class MemberTest {
         })
         void shouldThrow_whenNameIsBlank(String name) {
             // Act + Assert
-            assertThrows(Member.BlankNameException.class, () -> new Member(now, name, VALID_DATE, VALID_ID, null));
+            assertThrows(Member.BlankNameException.class, () -> new Member(
+                    now,
+                    VALID_ID,
+                    name,
+                    VALID_DATE,
+                    PASSIVE,
+                    VALID_DATE)
+            );
         }
 
         @Test
         @DisplayName("Fødselsdag i morgen afvises")
         void shouldThrow_whenBirthDateTomorrow() {
             // Arrange
-            final var future = now.plusDays(1);
+            final var tomorrow = now.plusDays(1);
 
             // Act + Assert
-            assertThrows(Member.FutureBirthDateException.class, () ->
-                    new Member(now, VALID_NAME, future, VALID_ID, null));
+            assertThrows(Member.FutureBirthDateException.class, () -> new Member(
+                    now,
+                    VALID_ID,
+                    VALID_NAME,
+                    tomorrow,
+                    PASSIVE,
+                    VALID_DATE)
+            );
         }
     }
 
@@ -93,9 +132,14 @@ class MemberTest {
         @DisplayName("Aldre passer med fødselsdagsdato")
         void shouldReturnAge_givenBirthDateAndCurrentDate(
                 int expectedAgeInYears, LocalDate birthDate, LocalDate currentDate) {
-
             // Arrange
-            Member member = new Member(now, "TestName", birthDate, new MemberId(5), null);
+            Member member = new Member(
+                    now,
+                    VALID_ID,
+                    VALID_NAME,
+                    birthDate,
+                    PASSIVE,
+                    VALID_DATE);
 
             // Act
             var age = member.getAgeInYears(currentDate);
@@ -104,4 +148,4 @@ class MemberTest {
             assertEquals(expectedAgeInYears, age);
         }
     }
-}*/
+}
