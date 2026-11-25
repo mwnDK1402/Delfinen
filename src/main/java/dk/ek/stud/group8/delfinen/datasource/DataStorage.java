@@ -1,3 +1,4 @@
+/*
 package dk.ek.stud.group8.delfinen.datasource;
 
 import dk.ek.stud.group8.delfinen.domain.Member;
@@ -72,3 +73,4 @@ public class DataStorage {
         return warnings;
     }
 }
+*/

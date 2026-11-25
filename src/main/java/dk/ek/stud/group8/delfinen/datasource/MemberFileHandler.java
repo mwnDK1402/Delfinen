@@ -1,3 +1,4 @@
+/*
 package dk.ek.stud.group8.delfinen.datasource;
 
 import dk.ek.stud.group8.delfinen.domain.ActivityType;
@@ -25,7 +26,7 @@ public class MemberFileHandler {
         this.fileName = fileName;
     }
 
-    /*public ArrayList<Member> load() throws FileNotFoundException {
+    public ArrayList<Member> load() throws FileNotFoundException {
         ArrayList<Member> members = new ArrayList<>();
         skippedLineCount = 0;
 
@@ -47,9 +48,9 @@ public class MemberFileHandler {
 
         fileScanner.close();
         return members;
-    }*/
+    }
 
-    /*public void save(ArrayList<Member> members) throws FileNotFoundException {
+    public void save(ArrayList<Member> members) throws FileNotFoundException {
         PrintStream output = new PrintStream(new File(fileName));
         output.println(HEADER);
 
@@ -57,16 +58,16 @@ public class MemberFileHandler {
             output.println(toCsvLine(m));
         }
         output.close();
-    }*/
+    }
 
-    /*private String toCsvLine(Member member) {
+    private String toCsvLine(Member member) {
         return member.getName() + SEPARATOR
                 + member.getId() + SEPARATOR
                 + member.getBirthDate() + SEPARATOR
                 + member.getMembershipType + SEPARATOR
                 + member.getSwimmerType() + SEPARATOR
                 + member.getJoinDate();
-    }*/
+    }
 
     private Member parseMember(String line) {
         String[] fields = line.split(SEPARATOR, - 1);
@@ -110,7 +111,8 @@ public class MemberFileHandler {
         return disciplines;
     }
 
-    /*public int getSkippedLineCount() {
+    public int getSkippedLineCount() {
         return skippedLineCount;
-    }*/
+    }
 }
+*/
