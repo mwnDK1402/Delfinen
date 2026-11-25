@@ -10,7 +10,6 @@ public final class MemberRegistry {
     public MemberRegistry(Random rng) {
         this.rng = rng;
         this.membersById = new HashMap<>();
-        // TODO: Load members from CSV file
     }
 
     /**
@@ -30,6 +29,12 @@ public final class MemberRegistry {
         }
     }
 
+    public void load(List<Member> loaded) {
+        for (var member : loaded) {
+            membersById.put(member.getMemberId(), member);
+        }
+    }
+
     public Member register(
             LocalDate now,
             LocalDate joinDate,
@@ -39,11 +44,11 @@ public final class MemberRegistry {
         var id = nextId();
         Member member = new Member(
                 now,
-                joinDate,
                 id,
                 name,
                 birthDate,
-                membershipType);
+                membershipType,
+                joinDate);
         membersById.put(id, member);
         return member;
     }

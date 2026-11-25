@@ -1,29 +1,33 @@
-/*
-package dk.ek.stud.group8.delfinen.datasource;
+package dk.ek.stud.group8.delfinen.persistence;
 
 import dk.ek.stud.group8.delfinen.domain.Member;
-import dk.ek.stud.group8.delfinen.domain.MembershipFee;
+import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
 
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
+import java.util.List;
 
-public class DataStorage {
-
+public final class DataStorage {
+    private final MemberRegistry memberRegistry;
     private final MemberFileHandler memberHandler;
     private final PaymentFileHandler paymentHandler;
     private final ResultsFileHandler resultHandler;
     private String warnings = "";
 
-    public DataStorage(String dataDirectory) {
+    public DataStorage(MemberRegistry memberRegistry, String dataDirectory) {
+        this.memberRegistry = memberRegistry;
         this.memberHandler = new MemberFileHandler(dataDirectory + "/medlemmer.tsv");
         this.paymentHandler = new PaymentFileHandler(dataDirectory + "/betalinger.tsv");
         this.resultHandler = new ResultsFileHandler(dataDirectory + "/resultater.tsv");
     }
 
-    public MemberRegister loadAll() {
+    public void loadAll() throws FileNotFoundException {
         warnings = "";
 
-        MemberRegister register = new MemberRegister(memberHandler.load());
+        List<Member> members = memberHandler.load();
+        memberRegistry.load(members);
 
+        // TODO(#5): Load MembershipFees
+        /*
         ArrayList<MembershipFee> payments = paymentHandler.load();
         for (MembershipFee payment : payments) {
             Member member = register.findMember(payment.getMemberId());
@@ -37,7 +41,10 @@ public class DataStorage {
                 warnings += "Betaling for medlem " + payment.getMemberId() + " sprunget over: " + e.getMessage() + "\n";
             }
         }
+        */
 
+        // TODO(#8): Load training results
+        /*
         ArrayList<Result> results = resultHandler.load();
         for (Result result : results) {
             Member member = register.findMember(result.getMemberId());
@@ -51,26 +58,32 @@ public class DataStorage {
                 warnings += "Resultatet for medlem " + result.getMemberId() + " sprunget over: " + e.getMessage() + "\n";
             }
         }
+        */
 
-        warnings = memberHandler.getWarnings()
+        warnings = memberHandler.getWarnings() + warnings;
+                /*
                 + paymentHandler.getWarnings()
                 + resultHandler.getWarnings()
-                + warnings;
-
-        return register;
+                */
     }
 
-    public void saveAll(MemberRegister register) {
-        memberHandler.save(register.getMembers());
-        paymentHandler.save(register.getAllPayments());
-        resultHandler.save(register.getAllResults());
-        warnings = memberHandler.getWarnings()
-                + paymentHandler.getWarnings()
-                + resultHandler.getWarnings();
+    public void saveAll(MemberRegistry registry) throws FileNotFoundException {
+        List<Member> members = registry.getMembers();
+        memberHandler.save(members);
+        // TODO(#5): Save MembershipFees
+        //paymentHandler.save(registry.getAllPayments());
+        // TODO(#8): Save training results
+        //resultHandler.save(registry.getAllResults());
+        warnings = String.join(System.lineSeparator(),
+                memberHandler.getWarnings()
+                /*
+                paymentHandler.getWarnings(),
+                resultHandler.getWarnings()
+                */
+        );
     }
 
     public String getWarnings() {
         return warnings;
     }
 }
-*/

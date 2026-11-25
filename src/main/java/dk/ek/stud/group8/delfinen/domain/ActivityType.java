@@ -1,6 +1,6 @@
 package dk.ek.stud.group8.delfinen.domain;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * (Danish: <i>Aktivitetsform</i>)
@@ -13,5 +13,5 @@ public sealed interface ActivityType {
     /**
      * (Danish: <i>Konkurrencesvømmer</i>)
      */
-    record Competitive(List<Discipline> disciplines) implements ActivityType {}
+    record Competitive(Set<Discipline> disciplines) implements ActivityType {}
 }

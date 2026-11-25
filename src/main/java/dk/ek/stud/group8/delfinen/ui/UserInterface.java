@@ -9,10 +9,7 @@ import dk.ek.stud.group8.delfinen.domain.MembershipType;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class UserInterface {
     private final Scanner scanner;
@@ -72,7 +69,7 @@ public class UserInterface {
 
         if (membershipType == MembershipActivityStatus.ACTIVE) {
             activityType = askForActivityType();
-            if (activityType instanceof ActivityType.Competitive(List<Discipline> disciplines)) {
+            if (activityType instanceof ActivityType.Competitive(Set<Discipline> disciplines)) {
                 disciplines.addAll(askForDisciplines());
             }
         }
@@ -221,7 +218,7 @@ public class UserInterface {
                     return new ActivityType.Recreational();
                 }
                 case 2 -> {
-                    return new ActivityType.Competitive(new ArrayList<>());
+                    return new ActivityType.Competitive(new HashSet<>());
                 }
                 default -> System.out.println("Ugyldigt valg.");
             }

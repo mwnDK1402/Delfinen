@@ -1,23 +1,23 @@
 package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public final class Member {
-    private final LocalDate joinDate;
     private final MemberId memberId;
     private final String name;
     private final LocalDate birthDate;
+    private final LocalDate joinDate;
     private MembershipType membershipType;
 
     public Member(
             LocalDate now,
-            LocalDate joinDate,
             MemberId memberId,
             String name,
             LocalDate birthDate,
-            MembershipType membershipType) {
+            MembershipType membershipType,
+            LocalDate joinDate) {
         if (name.isBlank()) {
             throw new BlankNameException(name);
         }
@@ -27,16 +27,40 @@ public final class Member {
         }
 
         if (membershipType instanceof MembershipType.Active(ActivityType type)
-                && type instanceof ActivityType.Competitive(List<Discipline> disciplines)
+                && type instanceof ActivityType.Competitive(Set<Discipline> disciplines)
                 && disciplines.isEmpty()) {
             throw new IllegalArgumentException("Konkurrencesvømmer skal have mindst én disciplin");
         }
 
-        this.joinDate = Objects.requireNonNull(joinDate);
         this.memberId = Objects.requireNonNull(memberId);
         this.name = Objects.requireNonNull(name);
         this.birthDate = Objects.requireNonNull(birthDate);
         this.membershipType = Objects.requireNonNull(membershipType);
+        this.joinDate = Objects.requireNonNull(joinDate);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Member member = (Member) o;
+        return Objects.equals(memberId, member.memberId)
+                && Objects.equals(name, member.name)
+                && Objects.equals(birthDate, member.birthDate)
+                && Objects.equals(membershipType, member.membershipType)
+                && Objects.equals(joinDate, member.joinDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(memberId, name, birthDate, membershipType, joinDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Member{" +
+                "memberId=" + memberId +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public String getName() {
@@ -45,6 +69,10 @@ public final class Member {
 
     public MemberId getMemberId() {
         return memberId;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
     public int getAgeInYears(LocalDate now) {
@@ -67,6 +95,10 @@ public final class Member {
 
     public void setMembershipType(MembershipType membershipType) {
         this.membershipType = Objects.requireNonNull(membershipType);
+    }
+
+    public LocalDate getJoinDate() {
+        return joinDate;
     }
 
     // Should we move this into a Name class instead, wrapping the name attribute?

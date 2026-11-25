@@ -1,7 +1,6 @@
-package dk.ek.stud.group8.delfinen.datasource;
+package dk.ek.stud.group8.delfinen.persistence;
 
 public class ResultsFileHandler {
-
     private String fileName;
     private static final String SEPARATOR = "\t";
     private static final String HEADER = String.join(SEPARATOR, "memberId", "name", "discipline", "type", "recordTime", "date");
