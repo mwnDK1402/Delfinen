@@ -1,10 +1,7 @@
 package dk.ek.stud.group8.delfinen.ui;
 
 import dk.ek.stud.group8.delfinen.controller.Controller;
-import dk.ek.stud.group8.delfinen.domain.ActivityType;
-import dk.ek.stud.group8.delfinen.domain.Discipline;
-import dk.ek.stud.group8.delfinen.domain.Member;
-import dk.ek.stud.group8.delfinen.domain.MembershipType;
+import dk.ek.stud.group8.delfinen.domain.*;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -35,7 +32,7 @@ public class UserInterface {
 
             switch (choice) {
                 case 1 -> chairpersonMenu();
-                case 2 -> System.out.println("Tilføj cashierMenu()");   // cashierMenu();
+                case 2 -> cashierMenu();
                 case 3 -> System.out.println("Tilføj tilføj coachMenu()");   // coachMenu();
                 case 0 -> running = false;
                 default -> System.out.println("Ugyldigt valg.");
@@ -55,6 +52,28 @@ public class UserInterface {
             switch (choice) {
                 case 1 -> createMember();
                 case 2 -> showAllMembers();
+                case 0 -> running = false;
+                default -> System.out.println("Ugyldigt valg.");
+            }
+        }
+    }
+
+    private void cashierMenu() {
+        boolean running = true;
+        while (running) {
+            System.out.println("--- Kasserer ---");
+            System.out.println("1. Vis liste af medlemmer i restance");
+            System.out.println("2. Registrer kontingent betaling");
+            System.out.println("3. Se samlet kontingentindtægt");
+            System.out.println("4. Se et medlems årlige kontingent");
+            System.out.println("0. Tilbage\n");
+
+            int choice = readInt("> Valg: ");
+            switch (choice) {
+                case 1 -> System.out.println("Tilføj en metode, der viser medlemmer i restance"); // TODO(#6)
+                case 2 -> markAsPaid();
+                case 3 -> showEstimatedMembershipFeeTotal();
+                case 4 -> System.out.println("Tilføj en metode, der viser et medlems årlige kontingent"); // TODO(#4)
                 case 0 -> running = false;
                 default -> System.out.println("Ugyldigt valg.");
             }
@@ -95,6 +114,28 @@ public class UserInterface {
         }
         for (Member m : members) {
             System.out.println("Navn: " + m.getName());
+        }
+    }
+
+    private void showEstimatedMembershipFeeTotal() {
+        int total = controller.getExpectedTotalIncome();
+
+        if (controller.getMembers().isEmpty()) {
+            System.out.println("Der er ingen medlemmer.");
+        } else {
+            System.out.println("Samlet kontingentindtægt: " + total + " kr.");
+        }
+    }
+
+    private void markAsPaid() {
+        int memberId = readInt("Indtast medlems-ID: ");
+        MemberId id = new MemberId(memberId);
+
+        try {
+            controller.markAsPaid(id);
+            System.out.println("Kontingentet er registreret som betalt.");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Medlemmet blev ikke fundet.");
         }
     }
 
