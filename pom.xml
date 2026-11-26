@@ -12,6 +12,7 @@
         <maven.compiler.source>25</maven.compiler.source>
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <exec.mainClass>dk.ek.stud.group8.delfinen.Main</exec.mainClass>
     </properties>
     <dependencies>
         <dependency>
@@ -34,6 +35,11 @@
                         </manifest>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.7.0</version>
             </plugin>
         </plugins>
     </build>
