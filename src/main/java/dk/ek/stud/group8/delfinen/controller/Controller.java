@@ -1,8 +1,6 @@
 package dk.ek.stud.group8.delfinen.controller;
 
-import dk.ek.stud.group8.delfinen.domain.Member;
-import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
-import dk.ek.stud.group8.delfinen.domain.MembershipType;
+import dk.ek.stud.group8.delfinen.domain.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,6 +28,25 @@ public class Controller {
 
     public List<Member> getMembers() {
         return memberRegistry.getMembers();
+    }
+
+    public int getExpectedTotalIncome() {
+        int total = 0;
+
+        for(Member member : memberRegistry.getMembers()) {
+            total += member.getMembershipFee().getAmount();
+        }
+        return total;
+    }
+
+    public void markAsPaid(MemberId id) {
+        Member member = memberRegistry.findMemberById(id);
+
+        if(member == null) {
+            throw new IllegalArgumentException("Member not found.");
+        }
+
+        member.getMembershipFee().markAsPaid();
     }
 
     // TODO:
