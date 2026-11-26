@@ -5,6 +5,7 @@ import dk.ek.stud.group8.delfinen.domain.*;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -96,6 +97,8 @@ public final class MemberFileHandler {
                     members.add(member);
                 }
             });
+        } catch (NoSuchFileException _) {
+            // Simply start with no members when no file exists
         }
 
         return members;
