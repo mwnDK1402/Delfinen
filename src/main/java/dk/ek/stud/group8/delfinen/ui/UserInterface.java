@@ -123,16 +123,21 @@ public class UserInterface {
         }
     }
 
-    private String readNonEmptyString(String prompt) {
-        while (true) {
-            terminal.print(prompt);
-            String input = terminal.readLine().trim();
-            if (!input.isEmpty()) {
-                return input;
-            }
+private String readNonEmptyString(String prompt) {
+    while (true) {
+        terminal.print(prompt);
+        String input = terminal.readLine().trim();
+        if (input.isEmpty()) {
             terminal.println("Feltet må ikke være tomt.");
+            continue;
         }
+        if (input.contains("\t")) {
+            terminal.println("Du tror du er smart, hva'?");
+            continue;
+        }
+        return input;
     }
+}
 
     private int readInt(String prompt) {
         while (true) {
