@@ -6,7 +6,7 @@ import dk.ek.stud.group8.delfinen.domain.Discipline;
 import dk.ek.stud.group8.delfinen.domain.Member;
 import dk.ek.stud.group8.delfinen.domain.MembershipType;
 
-import java.io.InputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -20,9 +20,20 @@ public class UserInterface {
         this.controller = Objects.requireNonNull(controller);
     }
 
-    public void start() {
+    public void start() throws InterruptedException {
         boolean running = true;
-        // TODO: loadMembers();
+        try {
+            controller.loadAll();
+        } catch (IOException e) {
+            terminal.println("Din gemte data kunne ikke indlæses: " + e.getMessage());
+            terminal.println("Er du sikker på, du vil fortsætte?");
+            var cont = readBoolean("> Fortsæt: ");
+            if (!cont) {
+                terminal.println("Programmet lukkes");
+                Thread.sleep(3000);
+                return;
+            }
+        }
 
         while (running) {
             terminal.println("==== Svømmeklubben Delfinen ====");
@@ -80,9 +91,12 @@ public class UserInterface {
                 case PASSIVE -> new MembershipType.Passive();
             };
             controller.addMember(LocalDate.now(), LocalDate.now(), name, birthDate, realMembershipType);
+            controller.saveAll();
             terminal.println(name + " er oprettet.");
         } catch (IllegalArgumentException e) {
             terminal.println("Medlemmet kunne ikke oprettes: " + e.getMessage());
+        } catch (IOException e) {
+            terminal.println("Medlemmet blev oprettet, men filen kunne ikke blive gemt: " + e.getMessage());
         }
     }
 
