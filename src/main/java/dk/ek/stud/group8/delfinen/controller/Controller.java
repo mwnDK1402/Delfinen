@@ -40,6 +40,10 @@ public class Controller {
         return memberRegistry.getMembers();
     }
 
+    public boolean hasStorageWarnings() {
+        return storage.hasWarnings();
+    }
+
     public String getStorageWarnings() {
         return storage.getWarnings();
     }

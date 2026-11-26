@@ -26,13 +26,13 @@ public class UserInterface {
             controller.loadAll();
         } catch (IOException e) {
             terminal.println("Din gemte data kunne ikke indlæses: " + e.getMessage());
-            terminal.println("Er du sikker på, du vil fortsætte?");
-            var cont = readBoolean("> Fortsæt: ");
-            if (!cont) {
-                terminal.println("Programmet lukkes");
-                Thread.sleep(3000);
-                return;
-            }
+            if (askQuit()) return;
+        }
+
+        if (controller.hasStorageWarnings()) {
+            String warnings = controller.getStorageWarnings();
+            terminal.println("Advarsel: " + warnings);
+            if (askQuit()) return;
         }
 
         while (running) {
@@ -52,6 +52,17 @@ public class UserInterface {
                 default -> terminal.println("Ugyldigt valg.");
             }
         }
+    }
+
+    private boolean askQuit() throws InterruptedException {
+        terminal.println("Er du sikker på, du vil fortsætte?");
+        var cont = readBoolean("> Fortsæt: ");
+        if (!cont) {
+            terminal.println("Programmet lukkes");
+            Thread.sleep(3000);
+            return true;
+        }
+        return false;
     }
 
     private void chairpersonMenu() {

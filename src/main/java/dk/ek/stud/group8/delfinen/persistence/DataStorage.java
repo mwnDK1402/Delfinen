@@ -87,6 +87,10 @@ public final class DataStorage {
         );
     }
 
+    public boolean hasWarnings() {
+        return memberHandler.getSkippedLineCount() > 0;
+    }
+
     public String getWarnings() {
         return warnings;
     }
