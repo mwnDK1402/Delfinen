@@ -48,7 +48,7 @@ public final class MemberFileHandler {
     }
 
     private static String writeDisciplines(Set<Discipline> disciplines) {
-        // TODO: Isabella will rewrite this without ninja tricks
+        // TODO(#37): Rewrite this without ninja tricks
         return String.join(DISCIPLINE_SEPARATOR, disciplines.stream().map(Enum::name).toList());
     }
 
