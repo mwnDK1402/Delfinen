@@ -176,7 +176,11 @@ public final class MemberFileHandler {
     }
 
     public String getWarnings() {
-        return skippedLineCount > 0 ? "Skipped " + skippedLineCount + " rows" : "";
+        return switch (skippedLineCount) {
+            case 0 -> "";
+            case 1 -> "Data for ét medlem var korrupt og kunne ikke indlæses";
+            default -> "Data for " + skippedLineCount + " medlemmer var korrupt og kunne ikke indlæses";
+        };
     }
 
     private enum ActivityTypeRecord {
