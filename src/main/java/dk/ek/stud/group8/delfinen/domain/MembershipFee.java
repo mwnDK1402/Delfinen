@@ -44,6 +44,9 @@ public class MembershipFee {
     }
 
     public void markAsPaid() {
+        if (this.paid) {
+            throw new IllegalStateException("Membership fee is already paid.");
+        }
         this.paid = true;
     }
 }

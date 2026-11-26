@@ -136,6 +136,8 @@ public class UserInterface {
             System.out.println("Kontingentet er registreret som betalt.");
         } catch (IllegalArgumentException e) {
             System.out.println("Medlemmet blev ikke fundet.");
+        } catch (IllegalStateException e) {
+            System.out.println("Kontingentet er allerede betalt.");
         }
     }
 
