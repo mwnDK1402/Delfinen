@@ -1,6 +1,5 @@
 package dk.ek.stud.group8.delfinen.domain;
 
-/*
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,7 +17,7 @@ class MembershipFeeTest {
     @DisplayName("Passivt medlemskab koster 500 kr.")
     void shouldHaveAmount_whenMembershipIsPassive() {
         // Arrange
-        var member = arrangeMember(0, null);
+        var member = arrangeMember(0, new MembershipType.Passive());
         var fee = new MembershipFee(now, member);
 
         // Act
@@ -40,7 +39,8 @@ class MembershipFeeTest {
     @DisplayName("Aktive medlemskaber")
     void shouldHaveAmount_givenAge(int expectedAmount, int age) {
         // Arrange
-        var member = arrangeMember(age, ActivityType.Recreational);
+        var membership = new MembershipType.Active(new ActivityType.Recreational());
+        var member = arrangeMember(age, membership);
         var fee = new MembershipFee(now, member);
 
         // Act
@@ -51,10 +51,10 @@ class MembershipFeeTest {
         assertEquals(expectedAmount, amount);
     }
 
-    private static Member arrangeMember(int age, ActivityType activityType) {
+    private static Member arrangeMember(int age, MembershipType membershipType) {
         String name = "TestName";
         var birthDate = now.minusYears(age);
         MemberId id = new MemberId(1);
-        return new Member(now, name, birthDate, id, activityType);
+        return new Member(now, id, name, birthDate, membershipType, now);
     }
-}*/
+}
