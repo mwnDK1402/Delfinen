@@ -143,6 +143,22 @@ public class UserInterface {
         }
     }
 
+    private boolean readBoolean(String prompt) {
+        while (true) {
+            terminal.print(prompt);
+            String input = terminal.readLine().trim().toLowerCase(Locale.ROOT);
+            switch (input) {
+                case "j", "ja", "y" -> {
+                    return true;
+                }
+                case "n", "nej" -> {
+                    return false;
+                }
+                default -> terminal.println("Skriv ja/nej (eller j/n).");
+            }
+        }
+    }
+
     private ArrayList<Discipline> askForDisciplines() {
         ArrayList<Discipline> chosen = new ArrayList<>();
         Discipline[] all = Discipline.values();
