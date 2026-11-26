@@ -5,6 +5,7 @@ import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.nio.file.Files;
 import java.util.List;
 
 public final class DataStorage {
@@ -12,6 +13,7 @@ public final class DataStorage {
     private final MemberFileHandler memberHandler;
     private final PaymentFileHandler paymentHandler;
     private final ResultsFileHandler resultHandler;
+    private final Path dataDirectory;
     private String warnings = "";
 
     public DataStorage(MemberRegistry memberRegistry, Path dataDirectory) {
@@ -19,11 +21,12 @@ public final class DataStorage {
         this.memberHandler = new MemberFileHandler(dataDirectory.resolve("medlemmer.tsv"));
         this.paymentHandler = new PaymentFileHandler(dataDirectory.resolve("betalinger.tsv"));
         this.resultHandler = new ResultsFileHandler(dataDirectory.resolve("resultater.tsv"));
+        this.dataDirectory = dataDirectory;
     }
 
     public void loadAll() throws IOException {
         warnings = "";
-
+        Files.createDirectories(dataDirectory);
         List<Member> members = memberHandler.load();
         memberRegistry.load(members);
 
@@ -68,8 +71,8 @@ public final class DataStorage {
                 */
     }
 
-    public void saveAll(MemberRegistry registry) throws IOException {
-        List<Member> members = registry.getMembers();
+    public void saveAll() throws IOException {
+        List<Member> members = memberRegistry.getMembers();
         memberHandler.save(members);
         // TODO(#5): Save MembershipFees
         //paymentHandler.save(registry.getAllPayments());
