@@ -12,11 +12,11 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class UserInterface {
-    private final Scanner scanner;
+    private final Terminal terminal;
     private final Controller controller;
 
-    public UserInterface(InputStream in, Controller controller) {
-        scanner = new Scanner(Objects.requireNonNull(in));
+    public UserInterface(Terminal terminal, Controller controller) {
+        this.terminal = Objects.requireNonNull(terminal);
         this.controller = Objects.requireNonNull(controller);
     }
 
@@ -25,20 +25,20 @@ public class UserInterface {
         // TODO: loadMembers();
 
         while (running) {
-            System.out.println("==== Svømmeklubben Delfinen ====");
-            System.out.println("1. Formand");
-            System.out.println("2. Kasserer");
-            System.out.println("3. Træner");
-            System.out.println("0. Afslut\n");
+            terminal.println("==== Svømmeklubben Delfinen ====");
+            terminal.println("1. Formand");
+            terminal.println("2. Kasserer");
+            terminal.println("3. Træner");
+            terminal.println("0. Afslut\n");
 
             int choice = readInt("> Valg: ");
 
             switch (choice) {
                 case 1 -> chairpersonMenu();
-                case 2 -> System.out.println("Tilføj cashierMenu()");   // cashierMenu();
-                case 3 -> System.out.println("Tilføj tilføj coachMenu()");   // coachMenu();
+                case 2 -> terminal.println("Tilføj cashierMenu()");   // cashierMenu();
+                case 3 -> terminal.println("Tilføj tilføj coachMenu()");   // coachMenu();
                 case 0 -> running = false;
-                default -> System.out.println("Ugyldigt valg.");
+                default -> terminal.println("Ugyldigt valg.");
             }
         }
     }
@@ -46,17 +46,17 @@ public class UserInterface {
     private void chairpersonMenu() {
         boolean running = true;
         while (running) {
-            System.out.println("--- Formand ---");
-            System.out.println("1. Opret medlem");
-            System.out.println("2. Vis alle medlemmer");
-            System.out.println("0. Tilbage\n");
+            terminal.println("--- Formand ---");
+            terminal.println("1. Opret medlem");
+            terminal.println("2. Vis alle medlemmer");
+            terminal.println("0. Tilbage\n");
 
             int choice = readInt("> Valg: ");
             switch (choice) {
                 case 1 -> createMember();
                 case 2 -> showAllMembers();
                 case 0 -> running = false;
-                default -> System.out.println("Ugyldigt valg.");
+                default -> terminal.println("Ugyldigt valg.");
             }
         }
     }
@@ -80,54 +80,54 @@ public class UserInterface {
                 case PASSIVE -> new MembershipType.Passive();
             };
             controller.addMember(LocalDate.now(), LocalDate.now(), name, birthDate, realMembershipType);
-            System.out.println(name + " er oprettet.");
+            terminal.println(name + " er oprettet.");
         } catch (IllegalArgumentException e) {
-            System.out.println("Medlemmet kunne ikke oprettes: " + e.getMessage());
+            terminal.println("Medlemmet kunne ikke oprettes: " + e.getMessage());
         }
     }
 
     private void showAllMembers() {
-        System.out.println("Alle medlemmer:");
+        terminal.println("Alle medlemmer:");
 
         List<Member> members = controller.getMembers();
         if (members.isEmpty()) {
-            System.out.println("Listen er tom.");
+            terminal.println("Listen er tom.");
         }
         for (Member m : members) {
-            System.out.println("Navn: " + m.getName());
+            terminal.println("Navn: " + m.getName());
         }
     }
 
     private String readNonEmptyString(String prompt) {
         while (true) {
-            System.out.print(prompt);
-            String input = scanner.nextLine().trim();
+            terminal.print(prompt);
+            String input = terminal.readLine().trim();
             if (!input.isEmpty()) {
                 return input;
             }
-            System.out.println("Feltet må ikke være tomt.");
+            terminal.println("Feltet må ikke være tomt.");
         }
     }
 
     private int readInt(String prompt) {
         while (true) {
-            System.out.print(prompt);
+            terminal.print(prompt);
             try {
-                return Integer.parseInt(scanner.nextLine().trim());
+                return Integer.parseInt(terminal.readLine().trim());
             } catch (NumberFormatException e) {
-                System.out.println("Skriv et tal.");
+                terminal.println("Skriv et tal.");
             }
         }
     }
 
     private LocalDate readDate(String prompt) {
         while (true) {
-            System.out.println(prompt);
-            String input = scanner.nextLine().trim();
+            terminal.println(prompt);
+            String input = terminal.readLine().trim();
             try {
                 return LocalDate.parse(input);
             } catch (DateTimeParseException e) {
-                System.out.println("Ugyldig data. Brug formattet yyyy-MM-dd, f.eks. 2010-06-12.");
+                terminal.println("Ugyldig data. Brug formatet yyyy-MM-dd, f.eks. 2010-06-12.");
             }
         }
     }
@@ -136,7 +136,7 @@ public class UserInterface {
         while (true) {
             LocalDate date = readDate(prompt);
             if (date.isAfter(LocalDate.now())) {
-                System.out.println("Fødselsdatoen kan ikke ligge i fremtiden.");
+                terminal.println("Fødselsdatoen kan ikke ligge i fremtiden.");
             } else {
                 return date;
             }
@@ -148,50 +148,50 @@ public class UserInterface {
         Discipline[] all = Discipline.values();
 
         while (true) {
-            System.out.println("Vælg disciplin (mindt én):");
+            terminal.println("Vælg disciplin (mindt én):");
             for (int i = 0; i < all.length; i++) {
-                System.out.println((i + 1) + ") " + all[i]);
+                terminal.println((i + 1) + ") " + all[i]);
             }
-            System.out.println("0) Færdig");
-            System.out.print("Valg: ");
+            terminal.println("0) Færdig");
+            terminal.print("Valg: ");
 
-            String input = scanner.nextLine().trim();
+            String input = terminal.readLine().trim();
             int choice;
             try {
                 choice = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                System.out.println("Skriv et tal.");
+                terminal.println("Skriv et tal.");
                 continue;
             }
 
             if (choice == 0) {
                 if (chosen.isEmpty()) {
-                    System.out.println("Du skal vælge mindst én disciplin.");
+                    terminal.println("Du skal vælge mindst én disciplin.");
                     continue;
                 }
                 return chosen;
             }
 
             if (choice < 1 || choice > all.length) {
-                System.out.println("Ugyldigt valg.");
+                terminal.println("Ugyldigt valg.");
                 continue;
             }
 
             Discipline d = all[choice - 1];
             if (chosen.contains(d)) {
-                System.out.println(d + " er allerede valgt.");
+                terminal.println(d + " er allerede valgt.");
             } else {
                 chosen.add(d);
-                System.out.println(d + " tilføjet.");
+                terminal.println(d + " tilføjet.");
             }
         }
     }
 
     private MembershipActivityStatus askForMembershipType() {
         while (true) {
-            System.out.println("Medlemskab:");
-            System.out.println("1. Aktivt");
-            System.out.println("2. Passivt");
+            terminal.println("Medlemskab:");
+            terminal.println("1. Aktivt");
+            terminal.println("2. Passivt");
 
             int choice = readInt("Valg: ");
             switch (choice) {
@@ -201,16 +201,16 @@ public class UserInterface {
                 case 2 -> {
                     return MembershipActivityStatus.PASSIVE;
                 }
-                default -> System.out.println("Ugyldigt valg.");
+                default -> terminal.println("Ugyldigt valg.");
             }
         }
     }
 
     private ActivityType askForActivityType() {
         while (true) {
-            System.out.println("Aktivitetsform:");
-            System.out.println("1. Motionist");
-            System.out.println("2. Konkurrencesvømmer");
+            terminal.println("Aktivitetsform:");
+            terminal.println("1. Motionist");
+            terminal.println("2. Konkurrencesvømmer");
 
             int choice = readInt("Valg: ");
             switch (choice) {
@@ -220,7 +220,7 @@ public class UserInterface {
                 case 2 -> {
                     return new ActivityType.Competitive(new HashSet<>());
                 }
-                default -> System.out.println("Ugyldigt valg.");
+                default -> terminal.println("Ugyldigt valg.");
             }
         }
     }
