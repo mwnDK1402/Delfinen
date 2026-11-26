@@ -146,7 +146,7 @@ public final class MemberFileHandler {
     private Member parseMember(String line) {
         String[] fields = line.split(SEPARATOR, -1);
         if (fields.length != HEADER_COLUMNS.size()) {
-            throw new IllegalArgumentException("forkert antal felter (" + fields.length + ")");
+            return null;
         }
         try {
             int memberId = Integer.parseInt(fields[0].trim());
