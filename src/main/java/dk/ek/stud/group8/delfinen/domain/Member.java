@@ -10,6 +10,7 @@ public final class Member {
     private final LocalDate birthDate;
     private final LocalDate joinDate;
     private MembershipType membershipType;
+    private MembershipFee membershipFee;
 
     public Member(
             LocalDate now,
@@ -37,6 +38,7 @@ public final class Member {
         this.birthDate = Objects.requireNonNull(birthDate);
         this.membershipType = Objects.requireNonNull(membershipType);
         this.joinDate = Objects.requireNonNull(joinDate);
+        this.membershipFee = new MembershipFee(now, this);
     }
 
     @Override
@@ -95,6 +97,10 @@ public final class Member {
 
     public void setMembershipType(MembershipType membershipType) {
         this.membershipType = Objects.requireNonNull(membershipType);
+    }
+
+    public MembershipFee getMembershipFee() {
+        return membershipFee;
     }
 
     public LocalDate getJoinDate() {
