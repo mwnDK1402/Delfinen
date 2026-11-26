@@ -135,11 +135,11 @@ public final class MemberFileHandler {
         return String.join(SEPARATOR,
                 String.valueOf(member.getMemberId().value()),
                 member.getName(),
-                member.getBirthDate().toString(), // TODO: Standardize format
+                FileDates.toCell(member.getBirthDate()),
                 String.valueOf(isActive),
                 activityType,
                 writeDisciplines(disciplines),
-                member.getJoinDate().toString() // TODO: Standardize format
+                FileDates.toCell(member.getJoinDate())
         );
     }
 
@@ -154,12 +154,12 @@ public final class MemberFileHandler {
         try {
             int memberId = Integer.parseInt(fields[0].trim());
             String name = fields[1].trim();
-            LocalDate birthdayDate = LocalDate.parse(fields[2].trim());
+            LocalDate birthdayDate = FileDates.fromCell(fields[2].trim());
             boolean active = Boolean.parseBoolean(fields[3].trim());
             // Hvis medlemmerne er passive, har de ingen aktivitetsform
             ActivityTypeRecord activityType = parseActivityType(fields[4]);
             Set<Discipline> disciplines = parseDisciplines(fields[5].trim());
-            LocalDate joinDate = LocalDate.parse(fields[6]);
+            LocalDate joinDate = FileDates.fromCell(fields[6]);
 
             return new Member(
                     LocalDate.now(),
