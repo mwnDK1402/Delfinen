@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -47,8 +46,8 @@ final class MemberFileHandlerTest {
                         now)
         );
         Path tsvFile = tempDir.resolve("save_then_load.tsv");
-        var saveHandler = new MemberFileHandler(tsvFile.toString());
-        var loadHandler = new MemberFileHandler(tsvFile.toString());
+        var saveHandler = new MemberFileHandler(tsvFile);
+        var loadHandler = new MemberFileHandler(tsvFile);
 
         // Act
         saveHandler.save(members);

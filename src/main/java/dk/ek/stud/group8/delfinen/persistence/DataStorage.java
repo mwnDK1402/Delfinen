@@ -3,7 +3,8 @@ package dk.ek.stud.group8.delfinen.persistence;
 import dk.ek.stud.group8.delfinen.domain.Member;
 import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
 
-import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 public final class DataStorage {
@@ -13,14 +14,14 @@ public final class DataStorage {
     private final ResultsFileHandler resultHandler;
     private String warnings = "";
 
-    public DataStorage(MemberRegistry memberRegistry, String dataDirectory) {
+    public DataStorage(MemberRegistry memberRegistry, Path dataDirectory) {
         this.memberRegistry = memberRegistry;
-        this.memberHandler = new MemberFileHandler(dataDirectory + "/medlemmer.tsv");
-        this.paymentHandler = new PaymentFileHandler(dataDirectory + "/betalinger.tsv");
-        this.resultHandler = new ResultsFileHandler(dataDirectory + "/resultater.tsv");
+        this.memberHandler = new MemberFileHandler(dataDirectory.resolve("medlemmer.tsv"));
+        this.paymentHandler = new PaymentFileHandler(dataDirectory.resolve("betalinger.tsv"));
+        this.resultHandler = new ResultsFileHandler(dataDirectory.resolve("resultater.tsv"));
     }
 
-    public void loadAll() throws FileNotFoundException {
+    public void loadAll() throws IOException {
         warnings = "";
 
         List<Member> members = memberHandler.load();
@@ -67,7 +68,7 @@ public final class DataStorage {
                 */
     }
 
-    public void saveAll(MemberRegistry registry) throws FileNotFoundException {
+    public void saveAll(MemberRegistry registry) throws IOException {
         List<Member> members = registry.getMembers();
         memberHandler.save(members);
         // TODO(#5): Save MembershipFees

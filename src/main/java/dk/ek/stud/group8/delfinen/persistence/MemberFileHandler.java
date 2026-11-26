@@ -2,12 +2,14 @@ package dk.ek.stud.group8.delfinen.persistence;
 
 import dk.ek.stud.group8.delfinen.domain.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintStream;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
+import java.util.stream.Stream;
 
 public final class MemberFileHandler {
     private static final String SEPARATOR = "\t";
@@ -22,21 +24,15 @@ public final class MemberFileHandler {
             "joinDate"      // YYYY-MM-DD
     );
 
-    private final String fileName;
+    private final Path fileName;
     private int skippedLineCount;
 
-    public MemberFileHandler(String fileName) {
+    public MemberFileHandler(Path fileName) {
         this.fileName = Objects.requireNonNull(fileName);
     }
 
     private static String header() {
         return String.join(SEPARATOR, HEADER_COLUMNS);
-    }
-
-    private static void skipHeader(Scanner fileScanner) {
-        if (fileScanner.hasNextLine()) {
-            fileScanner.nextLine();
-        }
     }
 
     private static Set<Discipline> parseDisciplines(String field) {
@@ -87,35 +83,33 @@ public final class MemberFileHandler {
         }
     }
 
-    public List<Member> load() throws FileNotFoundException {
+    public List<Member> load() throws IOException {
         ArrayList<Member> members = new ArrayList<>();
         skippedLineCount = 0;
 
-        try (Scanner fileScanner = new Scanner(new File(fileName))) {
-            skipHeader(fileScanner);
-
-            while (fileScanner.hasNextLine()) {
-                String line = fileScanner.nextLine();
+        try (Stream<String> lines = Files.lines(fileName).skip(1)) {
+            lines.forEach(line -> {
                 Member member = parseMember(line);
                 if (member == null) {
                     skippedLineCount++;
                 } else {
                     members.add(member);
                 }
-            }
+            });
         }
 
         return members;
     }
 
-    public void save(List<Member> members) throws FileNotFoundException {
-        PrintStream output = new PrintStream(fileName);
-        output.println(header());
-
-        for (Member m : members) {
-            output.println(toCsvLine(m));
+    public void save(List<Member> members) throws IOException {
+        try (BufferedWriter writer = Files.newBufferedWriter(fileName)) {
+            writer.write(header());
+            writer.newLine();
+            for (Member m : members) {
+                writer.write(toCsvLine(m));
+                writer.newLine();
+            }
         }
-        output.close();
     }
 
     private String toCsvLine(Member member) {
