@@ -87,8 +87,8 @@ public final class Member {
 
     public Seniority getSeniority(LocalDate now) {
         return getAgeInYears(Objects.requireNonNull(now)) >= 18
-                ? Seniority.Senior
-                : Seniority.Junior;
+                ? Seniority.SENIOR
+                : Seniority.JUNIOR;
     }
 
     public MembershipType getMembershipType() {

@@ -18,7 +18,7 @@ public class MembershipFee {
 
         if (member.isPassive()) {
             amount = 500;
-        } else if (member.getSeniority(now) == Seniority.Junior) {
+        } else if (member.getSeniority(now) == Seniority.JUNIOR) {
             amount = 1000;
         } else if (member.getAgeInYears(now) >= 60) {
             amount = 1200;
