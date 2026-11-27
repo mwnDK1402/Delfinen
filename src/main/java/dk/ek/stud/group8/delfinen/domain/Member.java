@@ -1,8 +1,8 @@
 package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 public final class Member {
     private final MemberId memberId;
@@ -27,8 +27,8 @@ public final class Member {
         }
 
         if (membershipType instanceof MembershipType.Active(ActivityType type)
-                && type instanceof ActivityType.Competitive(Set<Discipline> disciplines)
-                && disciplines.isEmpty()) {
+                && type instanceof ActivityType.Competitive(Map<Discipline, TrainingResult> bestByDiscipline)
+                && bestByDiscipline.isEmpty()) {
             throw new IllegalArgumentException("Konkurrencesvømmer skal have mindst én disciplin");
         }
 

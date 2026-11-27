@@ -1,6 +1,6 @@
 package dk.ek.stud.group8.delfinen.domain;
 
-import java.util.Set;
+import java.util.Map;
 
 /**
  * (Danish: <i>Aktivitetsform</i>)
@@ -13,5 +13,5 @@ public sealed interface ActivityType {
     /**
      * (Danish: <i>Konkurrencesvømmer</i>)
      */
-    record Competitive(Set<Discipline> disciplines) implements ActivityType {}
+    record Competitive(Map<Discipline, TrainingResult> bestByDiscipline) implements ActivityType {}
 }

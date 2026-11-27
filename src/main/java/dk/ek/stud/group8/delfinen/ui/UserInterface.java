@@ -1,10 +1,7 @@
 package dk.ek.stud.group8.delfinen.ui;
 
 import dk.ek.stud.group8.delfinen.controller.Controller;
-import dk.ek.stud.group8.delfinen.domain.ActivityType;
-import dk.ek.stud.group8.delfinen.domain.Discipline;
-import dk.ek.stud.group8.delfinen.domain.Member;
-import dk.ek.stud.group8.delfinen.domain.MembershipType;
+import dk.ek.stud.group8.delfinen.domain.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -91,8 +88,10 @@ public class UserInterface {
 
         if (membershipType == MembershipActivityStatus.ACTIVE) {
             activityType = askForActivityType();
-            if (activityType instanceof ActivityType.Competitive(Set<Discipline> disciplines)) {
-                disciplines.addAll(askForDisciplines());
+            if (activityType instanceof ActivityType.Competitive(Map<Discipline, TrainingResult> disciplines)) {
+                for (var discipline : askForDisciplines()) {
+                    disciplines.put(discipline, TrainingResult.NONE);
+                }
             }
         }
 
@@ -264,7 +263,7 @@ private String readNonEmptyString(String prompt) {
                     return new ActivityType.Recreational();
                 }
                 case 2 -> {
-                    return new ActivityType.Competitive(new HashSet<>());
+                    return new ActivityType.Competitive(new HashMap<>());
                 }
                 default -> terminal.println("Ugyldigt valg.");
             }

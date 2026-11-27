@@ -22,6 +22,7 @@ public final class MemberFileHandler {
             "active",       // true/false
             "activityType", // null/Recreational/Competitive
             "disciplines",  // null/BUTTERFLY,CRAWL,BACKCRAWL,BREASTSTROKE
+            // TODO: Add training results (potentially in another TSV file?)
             "joinDate"      // YYYY-MM-DD
     );
 
@@ -36,23 +37,31 @@ public final class MemberFileHandler {
         return String.join(SEPARATOR, HEADER_COLUMNS);
     }
 
-    private static Set<Discipline> parseDisciplines(String field) {
-        HashSet<Discipline> result = new HashSet<>(4);
+    private static Map<Discipline, TrainingResult> parseDisciplines(String field) {
+        HashMap<Discipline, TrainingResult> result = new HashMap<>(4);
         String[] disciplines = field.split(DISCIPLINE_SEPARATOR, -1);
         for (String discipline : disciplines) {
             if (discipline.isBlank()) continue;
-            result.add(Discipline.valueOf(discipline));
+            // TODO: Load training results by discipline
+            result.put(Discipline.valueOf(discipline), TrainingResult.NONE);
         }
 
         return result;
     }
 
-    private static String writeDisciplines(Set<Discipline> disciplines) {
+    private static String writeDisciplines(Map<Discipline, TrainingResult> bestByDiscipline) {
         // TODO(#37): Rewrite this without ninja tricks
-        return String.join(DISCIPLINE_SEPARATOR, disciplines.stream().map(Enum::name).toList());
+        return String.join(DISCIPLINE_SEPARATOR,
+                bestByDiscipline.keySet()
+                        .stream()
+                        .map(Enum::name)
+                        .toList());
     }
 
-    private static MembershipType createMembershipType(boolean active, ActivityTypeRecord activityType, Set<Discipline> disciplines) {
+    private static MembershipType createMembershipType(
+            boolean active,
+            ActivityTypeRecord activityType,
+            Map<Discipline, TrainingResult> bestByDiscipline) {
         if (!active) {
             return new MembershipType.Passive();
         }
@@ -63,7 +72,7 @@ public final class MemberFileHandler {
 
         return switch (activityType) {
             case RECREATIONAL -> new MembershipType.Active(new ActivityType.Recreational());
-            case COMPETITIVE -> new MembershipType.Active(new ActivityType.Competitive(disciplines));
+            case COMPETITIVE -> new MembershipType.Active(new ActivityType.Competitive(bestByDiscipline));
         };
     }
 
@@ -109,25 +118,25 @@ public final class MemberFileHandler {
             writer.write(header());
             writer.newLine();
             for (Member m : members) {
-                writer.write(toCsvLine(m));
+                writer.write(toTsvLine(m));
                 writer.newLine();
             }
         }
     }
 
-    private String toCsvLine(Member member) {
+    private String toTsvLine(Member member) {
         MembershipType membershipType = member.getMembershipType();
         boolean isActive = membershipType instanceof MembershipType.Active;
         String activityType = switch (membershipType) {
             case MembershipType.Active active -> writeActivityType(active.type());
             case MembershipType.Passive _ -> "";
         };
-        Set<Discipline> disciplines = switch (membershipType) {
+        Map<Discipline, TrainingResult> disciplines = switch (membershipType) {
             case MembershipType.Active active -> switch (active.type()) {
-                case ActivityType.Competitive competitive -> competitive.disciplines();
-                case ActivityType.Recreational _ -> Set.of();
+                case ActivityType.Competitive competitive -> competitive.bestByDiscipline();
+                case ActivityType.Recreational _ -> Map.of();
             };
-            case MembershipType.Passive _ -> Set.of();
+            case MembershipType.Passive _ -> Map.of();
         };
         return String.join(SEPARATOR,
                 String.valueOf(member.getMemberId().value()),
@@ -155,7 +164,7 @@ public final class MemberFileHandler {
             boolean active = Boolean.parseBoolean(fields[3].trim());
             // Hvis medlemmerne er passive, har de ingen aktivitetsform
             ActivityTypeRecord activityType = parseActivityType(fields[4]);
-            Set<Discipline> disciplines = parseDisciplines(fields[5].trim());
+            Map<Discipline, TrainingResult> bestByDisciplines = parseDisciplines(fields[5].trim());
             LocalDate joinDate = FileDates.fromCell(fields[6]);
 
             return new Member(
@@ -163,7 +172,7 @@ public final class MemberFileHandler {
                     new MemberId(memberId),
                     name,
                     birthdayDate,
-                    createMembershipType(active, activityType, disciplines),
+                    createMembershipType(active, activityType, bestByDisciplines),
                     joinDate);
 
         } catch (IllegalArgumentException | DateTimeParseException e) {

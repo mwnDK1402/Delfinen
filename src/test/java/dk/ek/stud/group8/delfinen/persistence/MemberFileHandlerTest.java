@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -32,10 +32,13 @@ final class MemberFileHandlerTest {
                         new MemberId(1),
                         "Mathias",
                         LocalDate.of(1999, 2, 14),
-                        new MembershipType.Active(new ActivityType.Competitive(Set.of(
-                                Discipline.BUTTERFLY,
-                                Discipline.BACKCRAWL
-                        ))),
+                        new MembershipType.Active(
+                                new ActivityType.Competitive(
+                                        Map.ofEntries(
+                                                Map.entry(Discipline.BUTTERFLY, TrainingResult.NONE),
+                                                Map.entry(Discipline.BACKCRAWL, TrainingResult.NONE)
+                                        )
+                                )),
                         now),
                 new Member(
                         now,
