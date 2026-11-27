@@ -19,8 +19,8 @@ public class Controller {
         this.storage = Objects.requireNonNull(storage);
     }
 
-    public void loadAll() throws IOException {
-        storage.loadAll();
+    public void loadAll(LocalDate now) throws IOException {
+        storage.loadAll(now);
     }
 
     public void saveAll() throws IOException {

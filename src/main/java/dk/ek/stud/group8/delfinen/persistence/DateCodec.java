@@ -5,14 +5,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-final class FileDates {
+final class DateCodec {
     private static final DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE;
 
     /**
      * @return the formatted date string, not null
      * @throws DateTimeException if an error occurs during printing
      */
-    public static String toCell(LocalDate date) throws DateTimeException {
+    static String encode(LocalDate date) throws DateTimeException {
         return date.format(fmt);
     }
 
@@ -20,7 +20,7 @@ final class FileDates {
      * @return the parsed local date, not null
      * @throws DateTimeParseException if the text cannot be parsed
      */
-    public static LocalDate fromCell(String cell) throws DateTimeParseException {
+    static LocalDate decode(String cell) throws DateTimeParseException {
         return LocalDate.parse(cell, fmt);
     }
 }

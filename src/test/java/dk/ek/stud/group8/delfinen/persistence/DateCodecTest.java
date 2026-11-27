@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("US14 - Datoformat")
-class FileDatesTest {
+class DateCodecTest {
     @DisplayName("Datoer indlæses uden ændringer")
     @ParameterizedTest(name = "Datoen {0} bliver indlæst uden ændring")
     @CsvSource(value = {
@@ -23,8 +23,8 @@ class FileDatesTest {
     })
     void shouldRoundtrip_givenValid_ISO8601_Dates(LocalDate valid) {
         // Act
-        var cell = FileDates.toCell(valid);
-        var loadedDate = FileDates.fromCell(cell);
+        var cell = DateCodec.encode(valid);
+        var loadedDate = DateCodec.decode(cell);
 
         // Assert
         assertEquals(valid, loadedDate);
@@ -43,6 +43,6 @@ class FileDatesTest {
     })
     void shouldThrow_givenInvalidDates(String invalid) {
         // Act + Assert
-        assertThrows(DateTimeParseException.class, () -> FileDates.fromCell(invalid));
+        assertThrows(DateTimeParseException.class, () -> DateCodec.decode(invalid));
     }
 }

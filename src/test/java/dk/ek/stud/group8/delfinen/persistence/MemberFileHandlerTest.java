@@ -55,7 +55,7 @@ final class MemberFileHandlerTest {
         // Act
         saveHandler.save(members);
         System.out.println(Files.readString(tsvFile));
-        var loaded = loadHandler.load();
+        var loaded = loadHandler.load(now);
 
         // Assert
         assertEquals(new HashSet<>(members), new HashSet<>(loaded), loadHandler.getWarnings());

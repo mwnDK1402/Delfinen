@@ -6,6 +6,7 @@ import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Files;
+import java.time.LocalDate;
 import java.util.List;
 
 public final class DataStorage {
@@ -24,10 +25,10 @@ public final class DataStorage {
         this.dataDirectory = dataDirectory;
     }
 
-    public void loadAll() throws IOException {
+    public void loadAll(LocalDate now) throws IOException {
         warnings = "";
         Files.createDirectories(dataDirectory);
-        List<Member> members = memberHandler.load();
+        List<Member> members = memberHandler.load(now);
         memberRegistry.load(members);
 
         // TODO(#5): Load MembershipFees

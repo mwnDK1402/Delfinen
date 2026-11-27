@@ -20,7 +20,7 @@ public class UserInterface {
     public void start() throws InterruptedException {
         boolean running = true;
         try {
-            controller.loadAll();
+            controller.loadAll(LocalDate.now());
         } catch (IOException e) {
             terminal.println("Din gemte data kunne ikke indlæses: " + e.getMessage());
             if (askQuit()) return;
