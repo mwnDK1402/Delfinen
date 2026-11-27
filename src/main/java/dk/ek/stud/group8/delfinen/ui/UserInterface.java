@@ -1,10 +1,7 @@
 package dk.ek.stud.group8.delfinen.ui;
 
 import dk.ek.stud.group8.delfinen.controller.Controller;
-import dk.ek.stud.group8.delfinen.domain.ActivityType;
-import dk.ek.stud.group8.delfinen.domain.Discipline;
-import dk.ek.stud.group8.delfinen.domain.Member;
-import dk.ek.stud.group8.delfinen.domain.MembershipType;
+import dk.ek.stud.group8.delfinen.domain.*;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -14,6 +11,7 @@ import java.util.*;
 public class UserInterface {
     private final Terminal terminal;
     private final Controller controller;
+    private Style Style;
 
     public UserInterface(Terminal terminal, Controller controller) {
         this.terminal = Objects.requireNonNull(terminal);
@@ -25,31 +23,42 @@ public class UserInterface {
         // TODO: loadMembers();
 
         while (running) {
-            terminal.println("==== Svømmeklubben Delfinen ====");
-            terminal.println("1. Formand");
-            terminal.println("2. Kasserer");
-            terminal.println("3. Træner");
-            terminal.println("0. Afslut\n");
+            showWelcome();
+            terminal.println();
+            terminal.println("Vælg rolle:");
+            terminal.println();
+            terminal.println(Style.menuItem("1", "Formand", "Opret og se medlemmer"));
+            terminal.println(Style.menuItem("2", "Kasserer", "Kontingent og restance"));
+            terminal.println(Style.menuItem("3", "Træner", "Hold, tider og top 5"));
+            terminal.println();
+            terminal.println(Style.menuItem("0", "Afslut", ""));
+            terminal.println();
 
-            int choice = readInt("> Valg: ");
+            int choice = readInt("> Vælg: ");
 
             switch (choice) {
                 case 1 -> chairpersonMenu();
-                case 2 -> terminal.println("Tilføj cashierMenu()");   // cashierMenu();
-                case 3 -> terminal.println("Tilføj tilføj coachMenu()");   // coachMenu();
+                case 2 -> cashierMenu();
+                case 3 -> coachMenu();
                 case 0 -> running = false;
-                default -> terminal.println("Ugyldigt valg.");
+                default -> terminal.println(Style.error("Ugyldigt valg."));
             }
         }
+        terminal.println();
+        terminal.println(Style.success("Farvel, og tak for i dag!"));
     }
 
     private void chairpersonMenu() {
         boolean running = true;
         while (running) {
-            terminal.println("--- Formand ---");
-            terminal.println("1. Opret medlem");
-            terminal.println("2. Vis alle medlemmer");
-            terminal.println("0. Tilbage\n");
+            //terminal.println(Style.heading("Formand", "Vælg handling"));
+            printHeader("Formand", "Vælg handling", controller.getMembers().size() + " medlemmer");
+            terminal.println();
+            terminal.println(Style.menuItem("1", "Opret medlem", ""));
+            terminal.println(Style.menuItem("2", "Vis alle medlemmer", ""));
+            terminal.println();
+            terminal.println(Style.menuItem("0", "← Tilbage", ""));
+            terminal.println();
 
             int choice = readInt("> Valg: ");
             switch (choice) {
@@ -61,9 +70,90 @@ public class UserInterface {
         }
     }
 
+    private void cashierMenu() {
+        boolean running = true;
+        while (running) {
+            printHeader("Kasserer", "Vælg handling", "Kontingent " + "2026");
+            terminal.println();
+            terminal.println(Style.statLabels(24, "Forventet indtægt", "Indbetalt", "Udestående"));
+            terminal.println(Style.statValues(24,
+                    Style.money(12000),
+                    Style.money(8000),
+                    Style.money(4000)));
+            terminal.println();
+            terminal.println(Style.progressBar(66, 32, "betalt"));
+            terminal.println();
+
+            terminal.println(Style.menuItem("1", "Se kontingent", ""));
+            terminal.println(Style.menuItem("2", "Registrer betaling", ""));
+            terminal.println(Style.menuItem("3", "Se medlemmer i restance", ""));
+            terminal.println();
+            terminal.println(Style.menuItem("0", "← Tilbage", ""));
+            terminal.println();
+
+            int choice = readInt("> Valg: ");
+            switch (choice) {
+                case 1 -> terminal.println("Metode mangler");
+                case 2 -> terminal.println("Metode mangler");
+                case 0 -> running = false;
+                default -> terminal.println("Ugyldigt valg.");
+            }
+        }
+    }
+
+    private void coachMenu() {
+        boolean running = true;
+        while (running) {
+            printHeader("Træner", "Vælg handling", "Efterår " + "2026");
+            terminal.println();
+            terminal.println(Style.menuItem("1", "Tilføj metoder", ""));
+            terminal.println(Style.menuItem("2", "Tilføj metoder", ""));
+            terminal.println(Style.menuItem("0", "← Tilbage", ""));
+            terminal.println();
+
+            int choice = readInt("> Valg: ");
+            switch (choice) {
+                case 1 -> terminal.println("Metode mangler");
+                case 2 -> terminal.println("Metode mangler");
+                case 0 -> running = false;
+                default -> terminal.println("Ugyldigt valg.");
+            }
+        }
+    }
+
+    public void showWelcome() {
+        terminal.println();
+        terminal.println(Style.boxTop());
+        terminal.println(Style.boxLine(""));
+        terminal.println(Style.boxLine("SVØMMEKLUBBEN DELFINEN"));
+        terminal.println(Style.boxLine("Medlemsadministration · v1.0"));
+        terminal.println(Style.boxLine(""));
+        terminal.println(Style.boxBottom());
+        terminal.println(Style.statusLine(LocalDate.now(),
+                "Medlemmer: " + controller.getMembers().size()));
+        terminal.println(Style.divider());
+    }
+
+    private void printHeader(String title, String subTitle, String rightText) {
+        terminal.println();
+        for (String line : Style.headerBox(title, subTitle, rightText)) {
+            terminal.println(line);
+        }
+    }
+
+    // TODO - Fix blanding af terminal metoder og sout
     public void createMember() {
+        terminal.println();
+        terminal.println(Style.statusLineTwo(Style.bold("FORMAND" + Style.getBreadcrumbChevron() + "OPRET MEDLEM"), "(skriv 0 for at annullere)"));
+        terminal.println(Style.divider());
+        // terminal.println(Style.dim("(skriv 0 for at annullere)"));
+        terminal.println();
+        terminal.println(Style.helperTextForm("Brug fornavn og efternavn, som det skal stå på medlemskortet"));
         String name = readNonEmptyString("Navn: ");
-        LocalDate birthDate = readBirthDate("Fødselsdato (YYYY-MM-dd): ");
+        terminal.println();
+        terminal.println(Style.helperTextForm("Skriv f.eks. 1993-06-12 ((YYYY-MM-dd)). Alder og junior/senior udregnes automatisk"));
+        LocalDate birthDate = readBirthDate("Fødselsdato: ");
+        terminal.println();
         MembershipActivityStatus membershipType = askForMembershipType(); // Spørger efter aktiv eller passiv
         ActivityType activityType = null; // Motionist eller konkurrencesvømmer
 
@@ -80,22 +170,75 @@ public class UserInterface {
                 case PASSIVE -> new MembershipType.Passive();
             };
             controller.addMember(LocalDate.now(), LocalDate.now(), name, birthDate, realMembershipType);
-            terminal.println(name + " er oprettet.");
+            terminal.println();
+            // TODO - tilføj getMemberId() til success print out
+            terminal.println(Style.success("✔ " + name + " er oprettet med medlemsnummer " + "3662."));
         } catch (IllegalArgumentException e) {
-            terminal.println("Medlemmet kunne ikke oprettes: " + e.getMessage());
+            terminal.println(Style.error("Medlemmet kunne ikke oprettes: " + e.getMessage()));
         }
     }
 
     private void showAllMembers() {
-        terminal.println("Alle medlemmer:");
-
         List<Member> members = controller.getMembers();
+        terminal.println(Style.heading("Formand" + Style.getBreadcrumbChevron()+ "Vis alle medlemmer"));
+
         if (members.isEmpty()) {
-            terminal.println("Listen er tom.");
+            terminal.println(Style.error("Listen er tom."));
+        } else {
+            LocalDate today = LocalDate.now();
+
+            terminal.println("  "
+                    + Style.padding("Nr", 4) + "  "
+                    + Style.padding("Navn", 18) + "  "
+                    + Style.paddingLeft("Alder", 5) + "  "
+                    + Style.padding("Gruppe", 6) + "  "
+                    + Style.padding("Aktivitet", 11) + "  "
+                    + "Discipliner");
+            terminal.println(Style.divider());
+
+            int juniors = 0, seniors = 0, passive = 0, recreational = 0, competitive = 0;
+
+            for (Member m : members) {
+                boolean junior = m.getSeniority(today) == Seniority.Junior;
+                if (junior) juniors++; else seniors++;
+
+                String activity;
+                if (m.isPassive()) {
+                    passive++;
+                    activity = Style.dim(Style.padding("Passiv", 11));
+                } else if (m.isCompetitive()) {
+                    competitive++;
+                    activity = Style.padding("Konkurrence", 11);
+                } else {
+                    recreational++;
+                    activity = Style.padding("Motionist", 11);
+                }
+
+                // TODO - Fix this temporary MemberId fix
+                terminal.println("  "
+                        // + Style.padding(m.getMemberId().toString(), 4) + "  "   // se note om MemberId
+                        + Style.padding("3622", 4) + "  "
+                        + Style.padding(m.getName(), 18) + "  "
+                        + Style.paddingLeft(String.valueOf(m.getAgeInYears(today)), 5) + "  "
+                        + Style.padding(junior ? "Junior" : "Senior", 6) + "  "
+                        + activity + "  "
+                        + disciplineLabel(m));
+            }
+
+            terminal.println(Style.divider());
+            terminal.println("  " + Style.dim(members.size() + " medlemmer · "
+                    + juniors + " junior · " + seniors + " senior · "
+                    + passive + " passiv · " + recreational + " motionist · "
+                    + competitive + " konkurrence"));
         }
-        for (Member m : members) {
-            terminal.println("Navn: " + m.getName());
+    }
+
+    private String disciplineLabel(Member m) {
+        String text = "";
+        for (Discipline d : m.getDisciplines()) {
+            text += (text.isEmpty() ? "" : ", ") + d.getDisplayName();   // eller getDisplayName()
         }
+        return text;
     }
 
     private String readNonEmptyString(String prompt) {
@@ -122,7 +265,7 @@ public class UserInterface {
 
     private LocalDate readDate(String prompt) {
         while (true) {
-            terminal.println(prompt);
+            terminal.print(prompt);
             String input = terminal.readLine().trim();
             try {
                 return LocalDate.parse(input);
@@ -148,12 +291,13 @@ public class UserInterface {
         Discipline[] all = Discipline.values();
 
         while (true) {
-            terminal.println("Vælg disciplin (mindt én):");
+            terminal.println();
+            terminal.println(Style.statusLineTwo("Vælg disciplin (mindst én):", "Trin 4 af 4"));
             for (int i = 0; i < all.length; i++) {
-                terminal.println((i + 1) + ") " + all[i]);
+                terminal.println("  " + (i + 1) + ". " + all[i].getDisplayName());
             }
-            terminal.println("0) Færdig");
-            terminal.print("Valg: ");
+            terminal.println("0. Færdig");
+            terminal.print("Vælg: ");
 
             String input = terminal.readLine().trim();
             int choice;
@@ -189,11 +333,11 @@ public class UserInterface {
 
     private MembershipActivityStatus askForMembershipType() {
         while (true) {
-            terminal.println("Medlemskab:");
-            terminal.println("1. Aktivt");
-            terminal.println("2. Passivt");
+            terminal.println(Style.statusLineTwo("Medlemskab:", "Trin 2 af 4"));
+            terminal.println("  1. Aktivt");
+            terminal.println("  2. Passivt");
 
-            int choice = readInt("Valg: ");
+            int choice = readInt("Vælg: ");
             switch (choice) {
                 case 1 -> {
                     return MembershipActivityStatus.ACTIVE;
@@ -201,18 +345,19 @@ public class UserInterface {
                 case 2 -> {
                     return MembershipActivityStatus.PASSIVE;
                 }
-                default -> terminal.println("Ugyldigt valg.");
+                default -> terminal.println("Ugyldigt valg.\n");
             }
         }
     }
 
     private ActivityType askForActivityType() {
         while (true) {
-            terminal.println("Aktivitetsform:");
-            terminal.println("1. Motionist");
-            terminal.println("2. Konkurrencesvømmer");
+            terminal.println();
+            terminal.println(Style.statusLineTwo("Aktivitetsform:", "Trin 3 af 4"));
+            terminal.println("  1. Motionist");
+            terminal.println("  2. Konkurrencesvømmer");
 
-            int choice = readInt("Valg: ");
+            int choice = readInt("Vælg: ");
             switch (choice) {
                 case 1 -> {
                     return new ActivityType.Recreational();
@@ -220,7 +365,7 @@ public class UserInterface {
                 case 2 -> {
                     return new ActivityType.Competitive(new HashSet<>());
                 }
-                default -> terminal.println("Ugyldigt valg.");
+                default -> terminal.println("Ugyldigt valg.\n");
             }
         }
     }

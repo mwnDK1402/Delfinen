@@ -1,6 +1,7 @@
 package dk.ek.stud.group8.delfinen.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
@@ -99,6 +100,19 @@ public final class Member {
 
     public LocalDate getJoinDate() {
         return joinDate;
+    }
+
+    public Set<Discipline> getDisciplines() {
+        if (membershipType instanceof MembershipType.Active(ActivityType type)
+                && type instanceof ActivityType.Competitive(Set<Discipline> disciplines)) {
+            return disciplines;
+        }
+        return Set.of();
+    }
+
+    public boolean isCompetitive() {
+        return membershipType instanceof MembershipType.Active(ActivityType type)
+                && type instanceof ActivityType.Competitive;
     }
 
     // Should we move this into a Name class instead, wrapping the name attribute?

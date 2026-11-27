@@ -15,14 +15,12 @@ public final class SystemTerminal implements Terminal {
 
     @Override
     public void print(String str) {
-        out.print(str);
+        out.print(Style.white(str));
         out.flush();
     }
 
     @Override
-    public void println(String str) {
-        System.out.println(str);
-    }
+    public void println(String str) { System.out.println(Style.white(str)); }
 
     @Override
     public String readLine() {
