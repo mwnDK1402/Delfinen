@@ -101,6 +101,22 @@ public final class Member {
         return joinDate;
     }
 
+    public void registerTrainingResult(Discipline discipline, TrainingResult result) {
+        if (membershipType instanceof MembershipType.Active(var type)
+                && type instanceof ActivityType.Competitive(var bestByDiscipline)) {
+            bestByDiscipline.put(
+                    Objects.requireNonNull(discipline),
+                    Objects.requireNonNull(result));
+        } else {
+            throw new UnsupportedOperationException("registerTrainingResult cannot be called on members that are not Competitive");
+        }
+    }
+
+    public boolean isCompetitive() {
+        return membershipType instanceof MembershipType.Active(ActivityType type)
+                && type instanceof ActivityType.Competitive;
+    }
+
     // Should we move this into a Name class instead, wrapping the name attribute?
     public static final class BlankNameException extends RuntimeException {
         public BlankNameException(String name) {
