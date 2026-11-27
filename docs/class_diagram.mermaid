@@ -1,0 +1,98 @@
+classDiagram
+    direction LR
+
+    class Controller {
+        membershipRegistry : MembershipRegistry
+        treasurerRules : TreasurerRules
+        addMember()
+        getMembers()
+        getExpectedTotalIncome()
+        markAsPaid()
+    }
+
+    class Member {
+        memberId : MemberId
+        name : String
+        birthDate : LocalDate
+        joinDate : LocalDate
+        membershipType : MembershipType
+        membershipFee : MembershipFee
+        getAgeInYear()
+        isPassive()
+        getSeniority()
+    }
+    class MemberId {}
+    Member "0..*" *-- "1" MemberId
+    Member "0..*" *-- "1" MembershipType
+
+    class MemberRegistry {
+        rng : Random
+        membersById : Map<MemberId, Member>
+        load()
+        register()
+        findMemberById()
+        getMembers()
+        nextId()
+        }
+    MemberRegistry "1" *-- "0..*" Member
+    class IdRange {}
+    MemberRegistry *-- IdRange
+
+    class MembershipFee {
+        startDate : LocalDate
+        endDate : LocalDate
+        amount : int
+        paid : boolean
+        markAsPaid()
+    }
+    Member "0..*" *-- "1..*" MembershipFee
+
+    class MembershipType {
+        <<interface>>
+    }
+
+    class Passive {
+    }
+    MembershipType <|-- Passive
+    class Active {
+    }
+    MembershipType <|-- Active
+    class ActivityType {
+        <<interface>>
+    }
+    Active *-- ActivityType
+    class Recreational {
+    }
+    class Competitive {
+    }
+    ActivityType <|-- Recreational
+    ActivityType <|-- Competitive
+    class Discipline {
+        <<enumeration>>
+        BUTTERFLY,
+        CRAWL,
+        BACKCRAWL,
+        BREASTSTROKE
+    }
+    Competitive *-- "1..4" Discipline
+
+    class Seniority {
+        <<enumeration>>
+        JUNIOR,
+        SENIOR
+    }
+
+    MembershipFee "0..*" *-- "1" Seniority
+
+    class TreasurerRules {
+        calculateTotalIncome()
+    }
+
+    TreasurerRules *-- MemberRegistry
+    Controller *-- MemberRegistry
+    Controller *-- TreasurerRules
+
+
+
+
+
