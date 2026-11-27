@@ -9,11 +9,13 @@ import java.util.Objects;
 public class Controller {
     // TODO: private final DataStorage storage;
     private final MemberRegistry memberRegistry;
+    private final TreasurerRules treasurerRules;
 
-    public Controller(MemberRegistry memberRegistry) {
+    public Controller(MemberRegistry memberRegistry, TreasurerRules treasurerRules) {
         // TODO: this.storage = new DataStorage("data");
         // TODO: this.memberRegister = storage.loadAll();
         this.memberRegistry = Objects.requireNonNull(memberRegistry);
+        this.treasurerRules = Objects.requireNonNull(treasurerRules);
     }
 
     public void addMember(
@@ -31,12 +33,7 @@ public class Controller {
     }
 
     public int getExpectedTotalIncome() {
-        int total = 0;
-
-        for(Member member : memberRegistry.getMembers()) {
-            total += member.getMembershipFee().getAmount();
-        }
-        return total;
+        return treasurerRules.calculateTotalIncome();
     }
 
     public void markAsPaid(MemberId id) {

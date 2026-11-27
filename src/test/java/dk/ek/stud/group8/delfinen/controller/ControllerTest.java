@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("US3 - Kontingentindtægt og kontingentstatus")
 class ControllerTest {
     MemberRegistry memberRegistry;
+    TreasurerRules treasurerRules;
     Controller controller;
 
     final LocalDate VALID_DATE = LocalDate.of(2002, 5, 6);
@@ -24,7 +25,8 @@ class ControllerTest {
     @BeforeEach
     void setUp() {
         memberRegistry = new MemberRegistry(new Random());
-        controller = new Controller(memberRegistry);
+        treasurerRules = new TreasurerRules(memberRegistry);
+        controller = new Controller(memberRegistry, treasurerRules);
     }
 
     @Nested

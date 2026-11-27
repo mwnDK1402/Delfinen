@@ -2,6 +2,7 @@ package dk.ek.stud.group8.delfinen;
 
 import dk.ek.stud.group8.delfinen.controller.Controller;
 import dk.ek.stud.group8.delfinen.domain.MemberRegistry;
+import dk.ek.stud.group8.delfinen.domain.TreasurerRules;
 import dk.ek.stud.group8.delfinen.ui.*;
 
 import java.util.Random;
@@ -14,7 +15,8 @@ public class Main {
         new Loop(terminal, menuFactory).start();*/
 
         MemberRegistry memberRegistry = new MemberRegistry(new Random());
-        Controller controller = new Controller(memberRegistry);
+        TreasurerRules treasurerRules = new TreasurerRules(memberRegistry);
+        Controller controller = new Controller(memberRegistry, treasurerRules);
         UserInterface ui = new UserInterface(System.in, controller);
         ui.start();
     }
